@@ -1,242 +1,208 @@
 /**
- * Form Handler Module
- * Handles contact form validation and submission
+ * form-handler.js
+ * ===============
+ * Módulo de validación de formulario.
+ *
+ * RESPONSABILIDAD ÚNICA: validar campos individuales y mostrar
+ * errores inline. El envío real y la lógica anti-spam viven en
+ * portfolio.js para evitar doble registro de listeners en #contactForm.
+ *
+ * API pública:
+ *   formHandler.init()            — registra validación en blur/input
+ *   formHandler.validateAll()     — valida todos los campos, devuelve bool
+ *   formHandler.validateField(input, type) — valida un campo, devuelve bool
+ *   formHandler.clearAll()        — limpia todos los errores
  */
 
 const formHandler = (() => {
-  // DOM Elements
-  let form = null;
-  let nameInput = null;
-  let emailInput = null;
+
+  /* ── Selectores ──────────────────────────────────────── */
+  let nameInput    = null;
+  let emailInput   = null;
   let messageInput = null;
-  let submitButton = null;
-  
-  // Validation patterns
-  const VALIDATION_PATTERNS = {
-    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    name: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/
+
+  /* ── Patrones de validación ──────────────────────────── */
+  const PATTERNS = {
+    // Acepta letras latinas, tildes y ñ — sin HTML ni URLs
+    name:  /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'\-]{2,60}$/,
+    // RFC 5322 simplificado, más estricto que type="email"
+    email: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/,
   };
-  
-  /**
-   * Initialize form handler
-   */
+
+  /* ── Mensajes de error ───────────────────────────────── */
+  // Centralizar mensajes facilita el soporte bilingüe futuro
+  const MESSAGES = {
+    name: {
+      empty:   'El nombre es requerido.',
+      invalid: 'Solo letras, entre 2 y 60 caracteres.',
+    },
+    email: {
+      empty:   'El email es requerido.',
+      invalid: 'Ingresa un email válido.',
+      long:    'El email no puede superar 100 caracteres.',
+    },
+    message: {
+      empty:   'El mensaje es requerido.',
+      short:   'El mensaje debe tener al menos 10 caracteres.',
+      long:    'El mensaje no puede superar 2000 caracteres.',
+      links:   'El mensaje contiene demasiados enlaces.',
+    },
+  };
+
+  /* ── Inicialización ──────────────────────────────────── */
   const init = () => {
-    cacheDOM();
-    bindEvents();
-  };
-  
-  /**
-   * Cache DOM elements
-   */
-  const cacheDOM = () => {
-    form = document.getElementById('contactForm');
-    nameInput = document.getElementById('name');
-    emailInput = document.getElementById('email');
+    nameInput    = document.getElementById('name');
+    emailInput   = document.getElementById('email');
     messageInput = document.getElementById('message');
-    submitButton = form?.querySelector('button[type="submit"]');
+
+    if (!nameInput || !emailInput || !messageInput) return;
+
+    _bindBlurValidation();
+    _bindCharCounter();
   };
-  
+
   /**
-   * Bind event listeners
+   * Registra validación en blur (cuando el usuario sale del campo).
+   * No valida mientras escribe — evita mensajes agresivos.
    */
-  const bindEvents = () => {
-    if (!form) return;
-    
-    form.addEventListener('submit', handleSubmit);
-    
-    // Real-time validation
-    nameInput?.addEventListener('blur', () => validateField(nameInput, 'name'));
-    emailInput?.addEventListener('blur', () => validateField(emailInput, 'email'));
-    messageInput?.addEventListener('blur', () => validateField(messageInput, 'message'));
-    
-    // Clear error on input
+  const _bindBlurValidation = () => {
+    nameInput.addEventListener('blur',    () => validateField(nameInput,    'name'));
+    emailInput.addEventListener('blur',   () => validateField(emailInput,   'email'));
+    messageInput.addEventListener('blur', () => validateField(messageInput, 'message'));
+
+    // Limpia error apenas el usuario empieza a corregir
     [nameInput, emailInput, messageInput].forEach(input => {
-      input?.addEventListener('input', () => clearError(input));
+      input.addEventListener('input', () => _clearError(input));
     });
   };
-  
+
   /**
-   * Handle form submission
+   * Contador de caracteres para el textarea.
+   * Mejora UX y disuade mensajes de spam masivos.
    */
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Validate all fields
-    const isNameValid = validateField(nameInput, 'name');
-    const isEmailValid = validateField(emailInput, 'email');
-    const isMessageValid = validateField(messageInput, 'message');
-    
-    if (!isNameValid || !isEmailValid || !isMessageValid) {
-      showNotification('Por favor, corrige los errores en el formulario', 'error');
-      return;
-    }
-    
-    // Get form data
-    const formData = {
-      name: nameInput.value.trim(),
-      email: emailInput.value.trim(),
-      message: messageInput.value.trim()
-    };
-    
-    // Simulate form submission
-    submitForm(formData);
+  const _bindCharCounter = () => {
+    const counter = document.getElementById('charCounter');
+    if (!counter || !messageInput) return;
+
+    messageInput.addEventListener('input', () => {
+      const len = messageInput.value.length;
+      counter.textContent = `${len} / 2000`;
+      // Advertencia visual en el 90% de la capacidad
+      counter.style.color = len > 1800 ? 'var(--color-gold)' : '';
+      counter.style.fontWeight = len > 1800 ? '600' : '';
+    });
   };
-  
+
+  /* ── Validación pública ───────────────────────────────── */
+
   /**
-   * Validate individual field
+   * Valida un campo individual y actualiza su estado visual.
+   * @param   {HTMLInputElement|HTMLTextAreaElement} input
+   * @param   {'name'|'email'|'message'} type
+   * @returns {boolean}
    */
-  const validateField = (input, fieldType) => {
+  const validateField = (input, type) => {
     if (!input) return false;
-    
     const value = input.value.trim();
-    let isValid = true;
-    let errorMessage = '';
-    
-    switch (fieldType) {
-      case 'name':
-        if (value === '') {
-          isValid = false;
-          errorMessage = 'El nombre es requerido';
-        } else if (!VALIDATION_PATTERNS.name.test(value)) {
-          isValid = false;
-          errorMessage = 'El nombre debe contener solo letras (2-50 caracteres)';
-        }
-        break;
-        
-      case 'email':
-        if (value === '') {
-          isValid = false;
-          errorMessage = 'El email es requerido';
-        } else if (!VALIDATION_PATTERNS.email.test(value)) {
-          isValid = false;
-          errorMessage = 'Por favor, ingresa un email válido';
-        }
-        break;
-        
-      case 'message':
-        if (value === '') {
-          isValid = false;
-          errorMessage = 'El mensaje es requerido';
-        } else if (value.length < 10) {
-          isValid = false;
-          errorMessage = 'El mensaje debe tener al menos 10 caracteres';
-        }
-        break;
+    const error = _getError(value, type);
+
+    _clearError(input);
+
+    if (error) {
+      _showError(input, error);
+      return false;
     }
-    
-    if (!isValid) {
-      showError(input, errorMessage);
-    } else {
-      clearError(input);
-    }
-    
-    return isValid;
+
+    input.classList.add('field--valid');
+    return true;
   };
-  
+
   /**
-   * Show error message for field
+   * Valida los tres campos a la vez. Útil en el submit handler.
+   * @returns {boolean} true si todos pasan
    */
-  const showError = (input, message) => {
-    const formGroup = input.closest('.form-group');
-    
-    // Remove existing error
-    clearError(input);
-    
-    // Add error class
-    input.classList.add('form-group__input--error');
-    
-    // Create error message element
-    const errorElement = document.createElement('span');
-    errorElement.className = 'form-group__error';
-    errorElement.textContent = message;
-    errorElement.style.color = 'var(--color-highlight)';
-    errorElement.style.fontSize = 'var(--font-size-xs)';
-    errorElement.style.marginTop = 'var(--space-xs)';
-    errorElement.style.display = 'block';
-    
-    formGroup.appendChild(errorElement);
+  const validateAll = () => {
+    // Evalúa los tres aunque falle el primero (UX: muestra todos los errores)
+    const n = validateField(nameInput,    'name');
+    const e = validateField(emailInput,   'email');
+    const m = validateField(messageInput, 'message');
+    return n && e && m;
   };
-  
+
   /**
-   * Clear error for field
+   * Limpia todos los errores y estados visuales del formulario.
    */
-  const clearError = (input) => {
-    const formGroup = input.closest('.form-group');
-    const errorElement = formGroup.querySelector('.form-group__error');
-    
-    input.classList.remove('form-group__input--error');
-    
-    if (errorElement) {
-      errorElement.remove();
-    }
-  };
-  
-  /**
-   * Submit form data (simulated)
-   */
-  const submitForm = (formData) => {
-    // Disable submit button
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = 'Enviando...';
-    }
-    
-    // Simulate API call
-    setTimeout(() => {
-      // Log form data (in production, this would be an API call)
-      console.log('Form submitted:', formData);
-      
-      // Show success message
-      showNotification('¡Mensaje enviado con éxito! Te contactaré pronto.', 'success');
-      
-      // Reset form
-      form.reset();
-      
-      // Re-enable submit button
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Enviar mensaje';
-      }
-    }, 1500);
-  };
-  
-  /**
-   * Show notification message
-   */
-  const showNotification = (message, type = 'info') => {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.textContent = message;
-    
-    // Style notification
-    Object.assign(notification.style, {
-      position: 'fixed',
-      bottom: '2rem',
-      right: '2rem',
-      padding: '1rem 1.5rem',
-      borderRadius: 'var(--border-radius-md)',
-      backgroundColor: type === 'success' ? '#10b981' : '#ef4444',
-      color: 'white',
-      fontWeight: '500',
-      boxShadow: 'var(--shadow-xl)',
-      zIndex: '9999',
-      animation: 'fadeInUp 0.3s ease-out'
+  const clearAll = () => {
+    [nameInput, emailInput, messageInput].forEach(input => {
+      if (input) _clearError(input);
     });
-    
-    document.body.appendChild(notification);
-    
-    // Remove after 5 seconds
-    setTimeout(() => {
-      notification.style.animation = 'fadeOut 0.3s ease-out';
-      setTimeout(() => notification.remove(), 300);
-    }, 5000);
   };
-  
-  // Public API
+
+  /* ── Lógica de validación interna ────────────────────── */
+
+  const _getError = (value, type) => {
+    switch (type) {
+
+      case 'name':
+        if (!value)                       return MESSAGES.name.empty;
+        if (!PATTERNS.name.test(value))   return MESSAGES.name.invalid;
+        // Rechaza inyección HTML
+        if (/<[^>]*>/.test(value))        return MESSAGES.name.invalid;
+        return null;
+
+      case 'email':
+        if (!value)                       return MESSAGES.email.empty;
+        if (!PATTERNS.email.test(value))  return MESSAGES.email.invalid;
+        if (value.length > 100)           return MESSAGES.email.long;
+        return null;
+
+      case 'message':
+        if (!value)                       return MESSAGES.message.empty;
+        if (value.length < 10)            return MESSAGES.message.short;
+        if (value.length > 2000)          return MESSAGES.message.long;
+        // Más de 3 URLs = spam típico
+        if ((value.match(/https?:\/\//g) || []).length > 3)
+                                          return MESSAGES.message.links;
+        return null;
+
+      default:
+        return null;
+    }
+  };
+
+  /* ── UI de errores ───────────────────────────────────── */
+
+  const _showError = (input, message) => {
+    const group = input.closest('.form-group');
+    if (!group) return;
+
+    // Eliminar error anterior (idempotente)
+    group.querySelector('.field-error')?.remove();
+
+    input.classList.remove('field--valid');
+    input.classList.add('field--invalid');
+
+    const errorEl = document.createElement('span');
+    errorEl.className   = 'field-error';
+    errorEl.textContent = message;
+    errorEl.setAttribute('role', 'alert');
+    group.appendChild(errorEl);
+  };
+
+  const _clearError = (input) => {
+    const group = input.closest('.form-group');
+    group?.querySelector('.field-error')?.remove();
+    input.classList.remove('field--invalid', 'field--valid');
+  };
+
+  /* ── API pública ─────────────────────────────────────── */
   return {
-    init
+    init,
+    validateField,
+    validateAll,
+    clearAll,
   };
+
 })();
 
 export { formHandler };

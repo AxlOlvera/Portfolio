@@ -8,10 +8,16 @@
 
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
-  <!-- Fuentes -->
+  <!-- Fuentes: DM Serif Display (títulos) + DM Sans (cuerpo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+
+  <!--
+    Cloudflare Turnstile — CAPTCHA moderno y no intrusivo.
+    async defer: no bloquea el render de la página.
+  -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <!-- Devicon CDN - Iconos de tecnologias (seccion de Habilidades) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
@@ -387,13 +393,17 @@
 
             <div class="contact__methods">
 
-              <!-- Correo actualizado -->
-              <a href="mailto:Axl.sanchezolvera@gmail.com" class="contact__method">
+              <!--
+                Email ofuscado: la dirección se construye en JS (portfolio.js → buildEmailLink()).
+                El HTML nunca contiene el email en texto plano — los scrapers no lo ven.
+                El usuario lo ve y puede hacer clic normalmente.
+              -->
+              <a id="emailLink" href="#" class="contact__method" aria-label="Enviar email">
                 <svg class="contact__method-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
                   <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Axl.sanchezolvera@gmail.com</span>
+                <span id="emailDisplay">...</span>
               </a>
 
               <!-- GitHub actualizado -->
@@ -415,34 +425,111 @@
             </div>
           </div>
 
-          <!-- Formulario de contacto con EmailJS -->
-          <form class="contact__form" id="contactForm" novalidate>
+          <!--
+            Formulario de contacto — sistema anti-spam de 4 capas:
+              1. Honeypot invisible (campo #hp_website)
+              2. Cloudflare Turnstile (CAPTCHA moderno)
+              3. Rate limiting client-side (localStorage)
+              4. Validación robusta por campo (form-handler.js)
+            El submit handler real vive en portfolio.js.
+          -->
+          <form class="contact__form" id="contactForm" novalidate autocomplete="off">
+
+            <!--
+              HONEYPOT INVISIBLE
+              Los bots automáticos llenan todos los campos visibles.
+              Este campo está fuera de pantalla (CSS, no display:none —
+              los bots detectan display:none y lo omiten).
+              Si llega con valor → es un bot → portfolio.js simula éxito.
+            -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="hp_website">No llenar</label>
+              <input
+                type="text"
+                id="hp_website"
+                name="website"
+                tabindex="-1"
+                autocomplete="off"
+              >
+            </div>
+
             <div class="form-group">
               <label for="name" class="form-group__label" data-i18n="contact.form.name">Nombre</label>
-              <input type="text" id="name" name="name" class="form-group__input" required>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-group__input"
+                required
+                minlength="2"
+                maxlength="60"
+                autocomplete="name"
+              >
             </div>
 
             <div class="form-group">
               <label for="email" class="form-group__label" data-i18n="contact.form.email">Email</label>
-              <input type="email" id="email" name="email" class="form-group__input" required>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-group__input"
+                required
+                maxlength="100"
+                autocomplete="email"
+              >
             </div>
 
             <div class="form-group">
               <label for="message" class="form-group__label" data-i18n="contact.form.message">Mensaje</label>
-              <textarea id="message" name="message" class="form-group__textarea" rows="5" required></textarea>
+              <textarea
+                id="message"
+                name="message"
+                class="form-group__textarea"
+                rows="5"
+                required
+                minlength="10"
+                maxlength="2000"
+              ></textarea>
+              <!-- Contador de caracteres — actualizado por form-handler.js -->
+              <span class="char-counter" id="charCounter">0 / 2000</span>
             </div>
 
-            <!-- Mensajes de feedback controlados por portfolio.js -->
-            <div class="form-feedback form-feedback--success" id="formSuccess" role="alert">
-              Mensaje enviado con exito! Te respondere pronto.
+            <!--
+              CLOUDFLARE TURNSTILE
+              data-sitekey: reemplazar con tu clave real de Turnstile.
+                Clave de prueba (siempre pasa): 1x00000000000000000000AA
+                Clave de prueba (siempre falla): 2x00000000000000000000AB
+              Obtén tu clave en: dash.cloudflare.com → Turnstile → Add Site
+              data-callback / data-error-callback / data-expired-callback:
+                deben coincidir con las funciones globales en portfolio.js
+            -->
+            <div
+              class="cf-turnstile"
+              data-sitekey="1x00000000000000000000AA"
+              data-theme="light"
+              data-size="compact"
+              data-callback="onTurnstileSuccess"
+              data-error-callback="onTurnstileError"
+              data-expired-callback="onTurnstileExpired"
+            ></div>
+
+            <!--
+              Mensaje de rate limiting — portfolio.js lo muestra con countdown
+              cuando el usuario excede el límite de envíos.
+            -->
+            <div class="rate-limit-msg" id="rateLimitMsg" role="alert">
+              Demasiados intentos. Espera <span id="rateLimitCountdown"></span> segundos.
             </div>
-            <div class="form-feedback form-feedback--error" id="formError" role="alert">
-              Hubo un error al enviar. Por favor intenta de nuevo.
-            </div>
+
+            <!-- Feedback de éxito/error — portfolio.js los controla -->
+            <div class="form-feedback form-feedback--success" id="formSuccess" role="alert"></div>
+            <div class="form-feedback form-feedback--error"   id="formError"   role="alert"></div>
 
             <button type="submit" class="btn btn--primary btn--full" id="submitBtn" data-i18n="contact.form.send">
               Enviar mensaje
             </button>
+
           </form>
 
         </div>
@@ -465,23 +552,21 @@
   </footer>
 
   <!--
-    EmailJS CDN - debe cargarse ANTES de portfolio.js
-    para que la variable global emailjs este disponible
-  -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    ORDEN DE CARGA DE SCRIPTS — importante, no reordenar:
 
-  <!--
-    main.js - modulo ES6 existente (navigation, scroll, smooth scroll)
-    No se modifica para no romper la arquitectura de imports existente
+    1. EmailJS CDN (debe estar antes de portfolio.js para que
+       la global `emailjs` exista cuando portfolio.js la use)
+
+    2. main.js (type="module") — coordina módulos ES6:
+       navigation, scroll-animations, smooth-scroll, form-handler
+
+    3. portfolio.js (script regular, sin module) — necesita acceso
+       a las globales `emailjs` y `turnstile` del CDN.
+       Maneja: traducciones ES/EN, email ofuscado, anti-spam, submit real.
+       (Turnstile ya se cargó en el <head> con async defer)
   -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="module" src="js/main.js"></script>
-
-  <!--
-    portfolio.js - nuevo script (idioma + EmailJS)
-    Se carga como script normal (no module) para compatibilidad
-    con el CDN de EmailJS que usa variables globales
-  -->
   <script src="js/portfolio.js"></script>
-
 </body>
 </html>

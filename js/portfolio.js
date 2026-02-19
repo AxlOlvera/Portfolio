@@ -1,24 +1,71 @@
 /**
  * portfolio.js
  * ============
- * Funcionalidades adicionales del portafolio.
- * Este archivo es independiente de main.js y sus módulos ES6,
- * se carga como <script> regular para no interferir con los imports.
+ * Script regular (sin type="module") — necesario para acceder
+ * a las globales de CDN: emailjs, turnstile.
  *
- * Módulos incluidos:
- *  1. Sistema de traducción ES / EN (sin recarga de página)
- *  2. Formulario de contacto integrado con EmailJS
+ * CONTENIDO:
+ *  1. Configuración centralizada
+ *  2. Sistema de traducción ES / EN
+ *  3. Ofuscación de email (anti-scraping)
+ *  4. Anti-spam: Honeypot + Turnstile + Rate Limiting
+ *  5. Submit handler único del formulario (con EmailJS)
+ *
+ * IMPORTANTE — ÚNICO SUBMIT HANDLER:
+ *  form-handler.js (módulo ES6) ahora SOLO registra validación
+ *  en blur/input. Este archivo registra el submit. De esta forma
+ *  no hay double binding ni race conditions entre módulos.
+ *
+ * ─────────────────────────────────────────────────────────────
+ * PARA ACTIVAR EMAILJS:
+ *  Reemplaza los valores en CONFIG.emailjs con tus credenciales.
+ *  No subas claves reales a repositorios públicos.
+ *
+ * PARA ACTIVAR TURNSTILE:
+ *  1. Ve a dash.cloudflare.com → Turnstile → "Add Site"
+ *  2. Dominio: tu-usuario.github.io
+ *  3. Copia el sitekey y reemplaza CONFIG.turnstile.sitekey
+ *  4. Reemplaza también el data-sitekey en index.html
+ * ─────────────────────────────────────────────────────────────
  */
 
 /* ============================================================
-   1. SISTEMA DE TRADUCCIÓN ES / EN
+   1. CONFIGURACIÓN CENTRALIZADA
+   ============================================================ */
+const CONFIG = {
+
+  emailjs: {
+    publicKey:  'J6SHj0NkxslunIEDz',   // ← tu clave pública de EmailJS
+    serviceId:  'service_nnrx67n',      // ← ID de tu servicio
+    templateId: 'template_wlo5qsr',     // ← ID de tu plantilla
+  },
+
+  // Email dividido para dificultar scraping.
+  // El DOM nunca contiene el email completo en texto plano.
+  email: {
+    user:   'Axl.sanchezolvera',
+    domain: 'gmail.com',
+  },
+
+  // Cloudflare Turnstile sitekey.
+  // Clave de prueba (siempre pasa): 1x00000000000000000000AA
+  // Reemplázala con tu clave real antes de producción.
+  turnstile: {
+    sitekey: '1x00000000000000000000AA',
+  },
+
+  rateLimit: {
+    maxAttempts: 3,       // intentos antes de bloquear
+    windowMs:    60_000,  // ventana: 60 segundos
+    cooldownMs:  300_000, // bloqueo tras exceder: 5 minutos
+  },
+};
+
+
+/* ============================================================
+   2. SISTEMA DE TRADUCCIÓN ES / EN
    ============================================================ */
 
-/**
- * Objeto de traducciones.
- * Cada clave coincide con el atributo [data-i18n] del HTML.
- * Para agregar textos nuevos: inclúyelos en ambos idiomas.
- */
 const translations = {
   es: {
     // Navbar
@@ -61,15 +108,16 @@ const translations = {
     'skills.tools':    'Herramientas',
 
     // Contact
-    'contact.title':        'Contacto',
-    'contact.subtitle':     '¿Trabajamos juntos?',
-    'contact.text':         'Estoy disponible para nuevos proyectos y colaboraciones. Si tienes una idea en mente o simplemente quieres saludar, no dudes en contactarme.',
-    'contact.form.name':    'Nombre',
-    'contact.form.email':   'Email',
-    'contact.form.message': 'Mensaje',
-    'contact.form.send':    'Enviar mensaje',
-    'contact.form.success': '¡Mensaje enviado con éxito! Te responderé pronto.',
-    'contact.form.error':   'Hubo un error al enviar. Por favor intenta de nuevo.',
+    'contact.title':       'Contacto',
+    'contact.subtitle':    '¿Trabajamos juntos?',
+    'contact.text':        'Estoy disponible para nuevos proyectos y colaboraciones. Si tienes una idea en mente o simplemente quieres saludar, no dudes en contactarme.',
+    'contact.form.name':   'Nombre',
+    'contact.form.email':  'Email',
+    'contact.form.message':'Mensaje',
+    'contact.form.send':   'Enviar mensaje',
+    'contact.form.success':'¡Mensaje enviado! Te responderé pronto.',
+    'contact.form.error':  'Error al enviar. Por favor intenta de nuevo.',
+    'contact.form.sending':'Enviando…',
 
     // Footer
     'footer.designed': 'Diseñado y desarrollado por',
@@ -79,83 +127,78 @@ const translations = {
   en: {
     // Navbar
     'nav.inicio':      'Home',
-    'nav.sobre':       'About me',
+    'nav.sobre':       'About',
     'nav.proyectos':   'Projects',
     'nav.habilidades': 'Skills',
     'nav.contacto':    'Contact',
 
     // Hero
     'hero.greeting':     "Hi, I'm",
-    'hero.role':         'Full Stack Developer & Experienced Team Leader',
-    'hero.description':  'Specializing in Java, Spring Boot, JavaScript and React while leveraging a background in operational leadership to build scalable, user-centric solutions.',
+    'hero.role':         'Full Stack Developer & Team Leader',
+    'hero.description':  'Specialized in Java, Spring Boot, JavaScript and React, with operational leadership experience building scalable, user-centered solutions.',
     'hero.cta.projects': 'View projects',
     'hero.cta.contact':  'Contact me',
 
     // About
     'about.title':      'About me',
-    'about.paragraph':  'With over 6 years of experience in high-volume bilingual environments (C1 English), I transitioned from supervising teams of 25 people and managing KPIs to building full-stack web applications. I bring a Project Management mindset—focused on Scrum methodologies, clean documentation, structured problem-solving, and efficient team collaboration—to every project I contribute to.',
-    'about.card1.title': 'Teamwork',
+    'about.paragraph':  'With 6+ years of experience in high-volume bilingual environments (English C1), I transitioned from supervising teams of 25 and managing KPIs to full stack web development. I apply a project management mindset—focused on Scrum methodologies, clear documentation, structured problem-solving, and efficient team collaboration—to every project I contribute to.',
+    'about.card1.title': 'Team Leadership',
     'about.card1.desc':  'Experience leading teams of up to 25 people and collaborating under Scrum methodology.',
-    'about.card2.title': 'Problem solving',
+    'about.card2.title': 'Problem Solving',
     'about.card2.desc':  'Focus on structured analysis, clear documentation, and continuous improvement.',
-    'about.card3.title': 'Full Stack Development',
-    'about.card3.desc':  'Experience in web development with Java, JavaScript, MySQL and Bootstrap.',
+    'about.card3.title': 'Full Stack Dev',
+    'about.card3.desc':  'Web development experience with Java, JavaScript, MySQL, and Bootstrap.',
 
     // Projects
-    'projects.title':         'Featured projects',
+    'projects.title':         'Featured Projects',
     'projects.featured':      'Featured',
     'projects.scrum.label':   'Project management:',
-    'projects.ixel.desc':     'A full-stack e-commerce solution developed for a real artisan shop. Contributed to frontend development using JavaScript, HTML, CSS and Bootstrap, and supported backend integration with Java and MySQL.',
-    'projects.ixel.scrum':    'Developed under Scrum methodology, participating in sprint planning, task organization, and technical documentation for final client delivery.',
-    'projects.hackaton.desc': 'E-commerce web application built during a hackathon, featuring a shopping cart, JavaScript validations, and Local Storage persistence.',
+    'projects.ixel.desc':     'Full stack e-commerce solution built for a real artisan shop. Contributed to frontend development with JavaScript, HTML, CSS and Bootstrap, and supported backend integration with Java and MySQL.',
+    'projects.ixel.scrum':    'Developed under Scrum methodology, participating in sprint planning, task organization, and technical documentation for client delivery.',
+    'projects.hackaton.desc': 'E-commerce web app developed during a hackathon, featuring a shopping cart, JavaScript validations, and Local Storage usage.',
     'projects.agenda.desc':   'Console-based Java application for contact management, implementing data structures and object-oriented logic.',
 
     // Skills
-    'skills.title':    'Technical skills',
+    'skills.title':    'Technical Skills',
     'skills.frontend': 'Frontend',
     'skills.backend':  'Backend',
     'skills.tools':    'Tools',
 
     // Contact
-    'contact.title':        'Contact',
-    'contact.subtitle':     "Let's work together?",
-    'contact.text':         "I'm available for new projects and collaborations. If you have an idea in mind or just want to say hello, feel free to reach out.",
-    'contact.form.name':    'Name',
-    'contact.form.email':   'Email',
-    'contact.form.message': 'Message',
-    'contact.form.send':    'Send message',
-    'contact.form.success': 'Message sent successfully! I will get back to you soon.',
-    'contact.form.error':   'There was an error sending. Please try again.',
+    'contact.title':       'Contact',
+    'contact.subtitle':    "Let's work together?",
+    'contact.text':        "I'm available for new projects and collaborations. If you have an idea in mind or just want to say hi, feel free to reach out.",
+    'contact.form.name':   'Name',
+    'contact.form.email':  'Email',
+    'contact.form.message':'Message',
+    'contact.form.send':   'Send message',
+    'contact.form.success':'Message sent! I\'ll get back to you soon.',
+    'contact.form.error':  'Error sending. Please try again.',
+    'contact.form.sending':'Sending…',
 
     // Footer
     'footer.designed': 'Designed and developed by',
     'footer.rights':   'All rights reserved',
-  }
+  },
 };
 
-/** Estado del idioma activo. Por defecto: español. */
 let currentLang = 'es';
 
 /**
- * Aplica las traducciones del objeto al DOM.
- * Busca cada elemento con [data-i18n] y actualiza su textContent.
- * @param {string} lang - 'es' o 'en'
+ * Aplica las traducciones al DOM actualizando todos los
+ * elementos con atributo [data-i18n].
  */
 function applyTranslations(lang) {
-  const t = translations[lang];
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (t[key] !== undefined) {
-      el.textContent = t[key];
-    }
+    const key  = el.getAttribute('data-i18n');
+    const text = translations[lang]?.[key];
+    if (text) el.textContent = text;
   });
-  // Actualiza lang del <html> para SEO y accesibilidad
   document.documentElement.lang = lang;
 }
 
 /**
- * Inicializa el botón de cambio de idioma.
- * Alterna entre ES y EN al hacer clic, sin recargar la página.
+ * Configura el botón de toggle ES/EN.
  */
 function setupLangToggle() {
   const btn       = document.getElementById('langToggle');
@@ -163,185 +206,321 @@ function setupLangToggle() {
   if (!btn || !langLabel) return;
 
   btn.addEventListener('click', () => {
-    currentLang = (currentLang === 'es') ? 'en' : 'es';
-
-    // El botón muestra el idioma al que se puede cambiar
-    langLabel.textContent = (currentLang === 'es') ? 'EN' : 'ES';
-
+    currentLang       = currentLang === 'es' ? 'en' : 'es';
+    langLabel.textContent = currentLang === 'es' ? 'EN' : 'ES';
     applyTranslations(currentLang);
-
-    // Mantener el texto del botón de envío sincronizado
-    syncSubmitButton();
+    _syncSubmitButton();
   });
 }
 
-/** Sincroniza el texto del botón de envío con el idioma activo. */
-function syncSubmitButton() {
-  const submitBtn = document.getElementById('submitBtn');
-  if (submitBtn && !submitBtn.disabled) {
-    submitBtn.textContent = translations[currentLang]['contact.form.send'];
+/** Mantiene el texto del botón submit sincronizado con el idioma activo. */
+function _syncSubmitButton() {
+  const btn = document.getElementById('submitBtn');
+  if (btn && !btn.disabled) {
+    btn.textContent = translations[currentLang]['contact.form.send'];
   }
 }
 
 
 /* ============================================================
-   2. FORMULARIO DE CONTACTO CON EMAILJS
+   3. OFUSCACIÓN DE EMAIL
    ============================================================
-   INSTRUCCIONES PARA ACTIVAR:
-   ──────────────────────────────────────────────────────────
-   1. Crea una cuenta en https://www.emailjs.com (plan gratuito
-      permite 200 correos/mes).
-   2. Crea un Servicio de correo (Gmail, Outlook, etc.).
-   3. Crea una Plantilla de email con estas variables:
-        {{name}}    → nombre del remitente
-        {{email}}   → email del remitente
-        {{message}} → mensaje
-   4. Ve a Account → API Keys y copia tu Public Key.
-   5. Reemplaza los placeholders de abajo:
-        'YOUR_PUBLIC_KEY'   → tu clave pública
-        'YOUR_SERVICE_ID'   → ID de tu servicio (ej. service_abc123)
-        'YOUR_TEMPLATE_ID'  → ID de tu plantilla (ej. template_xyz789)
-   ──────────────────────────────────────────────────────────
-   SEGURIDAD: No subas claves reales a repositorios públicos.
-   Si usas Vite/Webpack, guárdalas en un archivo .env:
-     VITE_EMAILJS_PUBLIC_KEY=tu_clave
-     VITE_EMAILJS_SERVICE_ID=tu_servicio
-     VITE_EMAILJS_TEMPLATE_ID=tu_plantilla
-   ============================================================ */
+   El email se construye en JS en runtime. El HTML nunca
+   contiene el email completo — los scrapers que leen el
+   HTML estático o el DOM serializado no lo encuentran.
+*/
+function buildEmailLink() {
+  const { user, domain } = CONFIG.email;
+  const address = `${user}@${domain}`;
 
-// ✅ Inicializa EmailJS
-if (typeof emailjs !== 'undefined') {
-  emailjs.init('J6SHj0NkxslunIEDz');
-} else {
-  console.warn('[portfolio.js] EmailJS no encontrado. Verifica que el CDN esté cargado antes de este script.');
+  // Link de email en la sección de métodos de contacto
+  const link    = document.getElementById('emailLink');
+  const display = document.getElementById('emailDisplay');
+
+  if (link && display) {
+    link.href          = `mailto:${address}`;
+    display.textContent = address;
+  }
 }
 
-/**
- * Configura el formulario de contacto:
- * - Validación de campos (nombre, email, mensaje)
- * - Envío via EmailJS
- * - Feedback visual de éxito o error sin recargar la página
- */
-function setupContactForm() {
-  const form      = document.getElementById('contactForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const successEl = document.getElementById('formSuccess');
-  const errorEl   = document.getElementById('formError');
 
+/* ============================================================
+   4. SISTEMA ANTI-SPAM
+   ============================================================ */
+
+/* ── 4a. Turnstile ────────────────────────────────────────── */
+let _turnstileToken = null;
+let _turnstileReady = false;
+
+// Estas funciones deben ser globales (el widget las llama por nombre)
+function onTurnstileSuccess(token) {
+  _turnstileToken = token;
+  _turnstileReady = true;
+}
+
+function onTurnstileError() {
+  _turnstileToken = null;
+  _turnstileReady = false;
+  _showFeedback('error', 'Error de verificación. Por favor recarga la página.');
+}
+
+function onTurnstileExpired() {
+  _turnstileToken = null;
+  _turnstileReady = false;
+  // Turnstile se regenera automáticamente — el usuario no hace nada
+}
+
+/* ── 4b. Rate Limiter ─────────────────────────────────────── */
+/**
+ * Rate limiting client-side via localStorage.
+ *
+ * LIMITACIÓN CONOCIDA: un atacante puede borrar localStorage.
+ * Lo que esta capa SÍ hace bien:
+ *   - Previene envíos accidentales múltiples
+ *   - Disuade bots simples que no manipulan localStorage
+ *   - Protección real complementaria a la del servicio de email
+ *     (EmailJS y Formspree tienen rate limiting en servidor)
+ */
+const RateLimiter = (() => {
+  const KEY = 'ao_contact_attempts';
+
+  const _getState = () => {
+    try {
+      const raw = localStorage.getItem(KEY);
+      return raw
+        ? JSON.parse(raw)
+        : { attempts: [], blocked: false, blockedUntil: 0 };
+    } catch {
+      return { attempts: [], blocked: false, blockedUntil: 0 };
+    }
+  };
+
+  const _saveState = (state) => {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* sin localStorage */ }
+  };
+
+  const isBlocked = () => {
+    const state = _getState();
+    const now   = Date.now();
+
+    // En periodo de cooldown activo
+    if (state.blocked && now < state.blockedUntil) {
+      return { blocked: true, remaining: Math.ceil((state.blockedUntil - now) / 1000) };
+    }
+
+    // Cooldown expirado — limpiar
+    if (state.blocked && now >= state.blockedUntil) {
+      _saveState({ attempts: [], blocked: false, blockedUntil: 0 });
+      return { blocked: false };
+    }
+
+    // Filtrar intentos dentro de la ventana activa
+    const windowStart    = now - CONFIG.rateLimit.windowMs;
+    const recentAttempts = (state.attempts || []).filter(t => t > windowStart);
+
+    if (recentAttempts.length >= CONFIG.rateLimit.maxAttempts) {
+      _saveState({
+        attempts:    recentAttempts,
+        blocked:     true,
+        blockedUntil: now + CONFIG.rateLimit.cooldownMs,
+      });
+      return {
+        blocked:   true,
+        remaining: Math.ceil(CONFIG.rateLimit.cooldownMs / 1000),
+      };
+    }
+
+    return { blocked: false };
+  };
+
+  const registerAttempt = () => {
+    const state       = _getState();
+    const now         = Date.now();
+    const windowStart = now - CONFIG.rateLimit.windowMs;
+    state.attempts    = [...(state.attempts || []).filter(t => t > windowStart), now];
+    _saveState(state);
+  };
+
+  /** Muestra un countdown visible en la UI mientras dura el bloqueo. */
+  const startCountdown = (seconds) => {
+    const msg     = document.getElementById('rateLimitMsg');
+    const counter = document.getElementById('rateLimitCountdown');
+    if (!msg || !counter) return;
+
+    let remaining = seconds;
+    msg.classList.add('visible');
+    counter.textContent = remaining;
+
+    const interval = setInterval(() => {
+      remaining--;
+      counter.textContent = remaining;
+      if (remaining <= 0) {
+        clearInterval(interval);
+        msg.classList.remove('visible');
+      }
+    }, 1000);
+  };
+
+  return { isBlocked, registerAttempt, startCountdown };
+})();
+
+
+/* ============================================================
+   5. FORMULARIO DE CONTACTO — SUBMIT HANDLER ÚNICO
+   ============================================================
+   Este es el único listener de 'submit' en #contactForm.
+   form-handler.js solo registra blur/input (validación visual).
+   Tener dos listeners de submit causaba doble envío y bugs.
+*/
+
+function setupContactForm() {
+  const form = document.getElementById('contactForm');
   if (!form) return;
 
-  form.addEventListener('submit', e => {
+  // Inicializar EmailJS UNA SOLA VEZ al cargar la página
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init(CONFIG.emailjs.publicKey);
+  } else {
+    console.warn('[portfolio.js] EmailJS CDN no encontrado. Verifica el orden de scripts en index.html.');
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const name    = form.name.value.trim();
-    const email   = form.email.value.trim();
-    const message = form.message.value.trim();
+    const honeypot   = form.querySelector('#hp_website');
+    const nameInput  = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const msgInput   = document.getElementById('message');
 
-    // Ocultar mensajes de feedback previos
-    hideFeedback(successEl);
-    hideFeedback(errorEl);
+    /* ── Capa 1: Honeypot ───────────────────────────────── */
+    // Si tiene valor, es un bot. Simular éxito sin enviar.
+    if (honeypot?.value) {
+      console.warn('[Security] Honeypot activado');
+      _setSubmitLoading(true);
+      await new Promise(r => setTimeout(r, 1500));
+      _showFeedback('success', translations[currentLang]['contact.form.success']);
+      form.reset();
+      _setSubmitLoading(false);
+      return;
+    }
 
-    // ── Validación de campos ───────────────────────────────
-    if (!name || !email || !message) {
-      showFeedback(errorEl,
+    /* ── Capa 2: Rate Limit ─────────────────────────────── */
+    const limitStatus = RateLimiter.isBlocked();
+    if (limitStatus.blocked) {
+      RateLimiter.startCountdown(limitStatus.remaining);
+      return;
+    }
+
+    /* ── Capa 3: Validación de campos ───────────────────── */
+    // Llamamos a formHandler.validateAll() del módulo ES6.
+    // Si formHandler no está disponible (race condition de carga),
+    // hacemos validación básica de respaldo.
+    let fieldsValid = false;
+
+    if (window._formHandlerValidateAll) {
+      // Bridge: main.js expone formHandler.validateAll como global
+      fieldsValid = window._formHandlerValidateAll();
+    } else {
+      // Fallback: validación básica
+      const name    = nameInput?.value.trim();
+      const email   = emailInput?.value.trim();
+      const message = msgInput?.value.trim();
+      fieldsValid   = !!(name && email && message && message.length >= 10);
+      if (!fieldsValid) {
+        _showFeedback('error', 'Por favor completa todos los campos correctamente.');
+        return;
+      }
+    }
+
+    if (!fieldsValid) {
+      form.querySelector('.field--invalid')?.focus();
+      return;
+    }
+
+    /* ── Capa 4: Turnstile ──────────────────────────────── */
+    if (!_turnstileReady || !_turnstileToken) {
+      _showFeedback('error',
         currentLang === 'es'
-          ? 'Por favor completa todos los campos.'
-          : 'Please fill in all fields.'
+          ? 'Por favor completa la verificación de seguridad.'
+          : 'Please complete the security verification.'
       );
       return;
     }
 
-    if (message.length < 10) {
-      showFeedback(errorEl,
-        currentLang === 'es'
-          ? 'El mensaje debe tener al menos 10 caracteres.'
-          : 'Message must be at least 10 characters.'
-      );
-      return;
+    /* ── Envío ──────────────────────────────────────────── */
+    _setSubmitLoading(true);
+    RateLimiter.registerAttempt();
+
+    const templateParams = {
+      name:    nameInput.value.trim(),
+      email:   emailInput.value.trim(),
+      message: msgInput.value.trim(),
+    };
+
+    try {
+      if (typeof emailjs !== 'undefined') {
+        await emailjs.send(
+          CONFIG.emailjs.serviceId,
+          CONFIG.emailjs.templateId,
+          templateParams
+        );
+      } else {
+        // Modo desarrollo sin CDN
+        console.log('[Dev] Envío simulado:', templateParams);
+        await new Promise(r => setTimeout(r, 1000));
+      }
+
+      _showFeedback('success', translations[currentLang]['contact.form.success']);
+      form.reset();
+
+      // Actualizar contador de chars tras reset
+      const counter = document.getElementById('charCounter');
+      if (counter) counter.textContent = '0 / 2000';
+
+      // Resetear Turnstile para el siguiente envío
+      if (typeof turnstile !== 'undefined') turnstile.reset();
+      _turnstileToken = null;
+      _turnstileReady = false;
+
+    } catch (err) {
+      console.error('[portfolio.js] EmailJS error:', err);
+      _showFeedback('error', translations[currentLang]['contact.form.error']);
+    } finally {
+      _setSubmitLoading(false);
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      showFeedback(errorEl,
-        currentLang === 'es'
-          ? 'Por favor ingresa un email válido.'
-          : 'Please enter a valid email address.'
-      );
-      return;
-    }
-    // ─────────────────────────────────────────────────────
-
-    // Activar estado de carga en el botón
-    setSubmitLoading(submitBtn, true);
-
-    // Parámetros — los nombres deben coincidir con tu plantilla de EmailJS
-    const templateParams = { name, email, message };
-
-    // Fallback si EmailJS no está disponible (desarrollo sin red)
-    if (typeof emailjs === 'undefined') {
-      console.warn('[portfolio.js] EmailJS no disponible — simulando envío.');
-      setTimeout(() => {
-        showFeedback(successEl, translations[currentLang]['contact.form.success']);
-        form.reset();
-        setSubmitLoading(submitBtn, false);
-      }, 1200);
-      return;
-    }
-
-    emailjs
-      .send(
-        'service_nnrx67n',   
-        'template_mtps84q',  
-        templateParams
-      )
-      .then(() => {
-        showFeedback(successEl, translations[currentLang]['contact.form.success']);
-        form.reset();
-      })
-      .catch(err => {
-        console.error('[portfolio.js] EmailJS error:', err);
-        showFeedback(errorEl, translations[currentLang]['contact.form.error']);
-      })
-      .finally(() => {
-        setSubmitLoading(submitBtn, false);
-      });
   });
 }
 
-/**
- * Activa/desactiva el estado de carga del botón de envío.
- * @param {HTMLButtonElement} btn
- * @param {boolean} loading
- */
-function setSubmitLoading(btn, loading) {
+
+/* ── Helpers de UI ───────────────────────────────────────── */
+
+function _setSubmitLoading(loading) {
+  const btn = document.getElementById('submitBtn');
   if (!btn) return;
   btn.disabled    = loading;
   btn.textContent = loading
-    ? (currentLang === 'es' ? 'Enviando…' : 'Sending…')
+    ? translations[currentLang]['contact.form.sending']
     : translations[currentLang]['contact.form.send'];
 }
 
-/**
- * Muestra un elemento de feedback con el mensaje dado.
- * Se oculta automáticamente después de 7 segundos.
- * @param {HTMLElement} el - Elemento .form-feedback
- * @param {string} message - Texto a mostrar
- */
-function showFeedback(el, message) {
-  if (!el) return;
-  el.textContent = message;
-  el.classList.add('visible');
-  clearTimeout(el._hideTimeout);
-  el._hideTimeout = setTimeout(() => hideFeedback(el), 7000);
-}
+function _showFeedback(type, message) {
+  const successEl = document.getElementById('formSuccess');
+  const errorEl   = document.getElementById('formError');
 
-/**
- * Oculta un elemento de feedback.
- * @param {HTMLElement} el
- */
-function hideFeedback(el) {
-  if (!el) return;
-  el.classList.remove('visible');
+  [successEl, errorEl].forEach(el => {
+    if (el) { el.textContent = ''; el.classList.remove('visible'); }
+  });
+
+  const target = type === 'success' ? successEl : errorEl;
+  if (!target) return;
+
+  target.textContent = message;
+  target.classList.add('visible');
+
+  clearTimeout(target._hideTimeout);
+  target._hideTimeout = setTimeout(() => {
+    target.classList.remove('visible');
+  }, 7000);
 }
 
 
@@ -349,6 +528,8 @@ function hideFeedback(el) {
    INICIALIZACIÓN
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
+  applyTranslations(currentLang);  // Estado inicial en español
   setupLangToggle();
+  buildEmailLink();
   setupContactForm();
 });

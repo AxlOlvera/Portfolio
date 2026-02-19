@@ -641,6 +641,88 @@
 }
 .form-feedback.visible { display: block; }
 
+
+/* ── Anti-Spam UI Components ──────────────────────────────
+   Estilos para los elementos nuevos del sistema anti-spam.
+   No colisionen con nada existente — todas son clases nuevas.
+*/
+
+/* HONEYPOT: posicionamiento fuera de pantalla.
+   NO usar display:none ni visibility:hidden —
+   los bots sofisticados los detectan y omiten el campo correctamente.
+   Este método es más difícil de detectar programáticamente. */
+.hp-field {
+  position:       absolute;
+  left:           -9999px;
+  top:            -9999px;
+  width:          1px;
+  height:         1px;
+  overflow:       hidden;
+  opacity:        0;
+  pointer-events: none;
+}
+
+/* CONTADOR DE CARACTERES — debajo del textarea */
+.char-counter {
+  display:        block;
+  text-align:     right;
+  font-family:    var(--font-body);
+  font-size:      var(--font-size-xs);
+  color:          var(--color-text-tertiary);
+  margin-top:     var(--space-xs);
+  transition:     color var(--transition-fast);
+  font-variant-numeric: tabular-nums; /* ancho fijo para no saltar */
+}
+
+/* CLOUDFLARE TURNSTILE — tamaño compacto, alineado con el form */
+.cf-turnstile {
+  margin: var(--space-md) 0;
+}
+
+/* MENSAJE DE RATE LIMIT — aparece con countdown cuando hay bloqueo */
+.rate-limit-msg {
+  display:       none;
+  padding:       var(--space-md) var(--space-lg);
+  background:    rgba(153, 27, 27, 0.07);
+  color:         #7f1d1d;
+  border:        1px solid rgba(153, 27, 27, 0.18);
+  border-radius: var(--border-radius-md);
+  font-size:     var(--font-size-sm);
+  font-weight:   var(--font-weight-medium);
+  margin-bottom: var(--space-md);
+  line-height:   var(--line-height-normal);
+}
+.rate-limit-msg.visible { display: block; }
+.rate-limit-msg #rateLimitCountdown {
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ESTADOS DE VALIDACIÓN POR CAMPO
+   .field--valid   → borde dorado sutil cuando el campo está OK
+   .field--invalid → borde rojo tenue + el error span debajo */
+.form-group__input.field--valid,
+.form-group__textarea.field--valid {
+  border-color: var(--color-gold);
+  box-shadow:   0 0 0 2px rgba(170, 136, 71, 0.08);
+}
+
+.form-group__input.field--invalid,
+.form-group__textarea.field--invalid {
+  border-color: rgba(153, 27, 27, 0.5);
+  box-shadow:   0 0 0 2px rgba(153, 27, 27, 0.08);
+}
+
+/* ERROR INLINE POR CAMPO — insertado por form-handler.js */
+.field-error {
+  display:     block;
+  font-size:   var(--font-size-xs);
+  color:       #7f1d1d;
+  margin-top:  var(--space-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
 /* ── Responsive Components ────────────────────────── */
 @media (max-width: 1024px) {
   .project-card--featured             { grid-template-columns: 1fr; }

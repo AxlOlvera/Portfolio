@@ -1,147 +1,155 @@
 /**
- * Navigation Module
- * Handles mobile menu toggle and scroll behavior
+ * navigation.js
+ * =============
+ * Menú móvil, scroll spy y estado del header.
+ *
+ * MEJORAS respecto a la versión anterior:
+ *  - Scroll handler con requestAnimationFrame (throttle real)
+ *    Antes: se ejecutaba en CADA evento scroll (hasta 60×/seg)
+ *    Ahora: como máximo 1 ejecución por frame de renderizado
+ *  - handleResize con debounce de 150ms
+ *  - Cerrar menú al hacer clic fuera de él (overlay)
+ *  - Gestión correcta de aria-expanded en el toggle
  */
 
 const navigation = (() => {
-  // DOM Elements
-  let header = null;
+
+  /* ── Estado ──────────────────────────────────────────── */
+  let header    = null;
   let navToggle = null;
-  let navMenu = null;
-  let navLinks = null;
-  
-  // State
-  let lastScrollPosition = 0;
-  let isMenuOpen = false;
-  
-  /**
-   * Initialize navigation
-   */
+  let navMenu   = null;
+  let navLinks  = null;
+
+  let lastScrollY    = 0;
+  let isMenuOpen     = false;
+  let rafScheduled   = false;   // flag para throttle con RAF
+  let resizeTimer    = null;    // timer para debounce de resize
+
+  /* ── Inicialización ──────────────────────────────────── */
   const init = () => {
-    cacheDOM();
-    bindEvents();
-    updateHeaderOnScroll();
+    _cacheDOM();
+    _bindEvents();
+    _updateHeader();            // estado inicial sin esperar scroll
   };
-  
-  /**
-   * Cache DOM elements
-   */
-  const cacheDOM = () => {
-    header = document.getElementById('header');
+
+  const _cacheDOM = () => {
+    header    = document.getElementById('header');
     navToggle = document.getElementById('navToggle');
-    navMenu = document.getElementById('navMenu');
-    navLinks = document.querySelectorAll('.nav__link');
+    navMenu   = document.getElementById('navMenu');
+    navLinks  = document.querySelectorAll('.nav__link');
   };
-  
-  /**
-   * Bind event listeners
-   */
-  const bindEvents = () => {
-    if (navToggle) {
-      navToggle.addEventListener('click', toggleMenu);
-    }
-    
-    if (navLinks.length > 0) {
-      navLinks.forEach(link => {
-        link.addEventListener('click', handleNavLinkClick);
-      });
-    }
-    
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
+
+  /* ── Eventos ─────────────────────────────────────────── */
+  const _bindEvents = () => {
+    navToggle?.addEventListener('click', _toggleMenu);
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', _handleNavLinkClick);
+    });
+
+    // Throttle real: el scroll encola UN frame de RAF como máximo
+    window.addEventListener('scroll', _onScroll, { passive: true });
+
+    // Debounce de resize: solo ejecuta cuando el usuario para de redimensionar
+    window.addEventListener('resize', _onResize);
+
+    // Cerrar menú con Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isMenuOpen) _closeMenu();
+    });
   };
-  
+
+  /* ── Throttle de scroll con RAF ──────────────────────── */
   /**
-   * Toggle mobile menu
+   * El problema de la versión anterior:
+   *   window.addEventListener('scroll', handleScroll)
+   *   → handleScroll() se llama 60+ veces por segundo mientras el
+   *     usuario scrollea. Cada llamada hace querySelectorAll y lee
+   *     offsetTop de todas las secciones (layout thrashing).
+   *
+   * La solución: encolar en RAF.
+   *   → Solo se ejecuta cuando el browser está listo para pintar.
+   *   → rafScheduled impide encolar más de un frame a la vez.
    */
-  const toggleMenu = () => {
-    isMenuOpen = !isMenuOpen;
-    
-    navToggle.classList.toggle('nav__toggle--active');
-    navMenu.classList.toggle('nav__menu--active');
-    
-    // Prevent body scroll when menu is open
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+  const _onScroll = () => {
+    if (rafScheduled) return;
+    rafScheduled = true;
+
+    requestAnimationFrame(() => {
+      _updateHeader();
+      _updateActiveLink();
+      lastScrollY  = window.scrollY;
+      rafScheduled = false;
+    });
   };
-  
-  /**
-   * Handle navigation link clicks
-   */
-  const handleNavLinkClick = (e) => {
-    // Close mobile menu if open
-    if (isMenuOpen) {
-      toggleMenu();
-    }
-    
-    // Update active state
-    navLinks.forEach(link => link.classList.remove('nav__link--active'));
-    e.target.classList.add('nav__link--active');
+
+  /* ── Debounce de resize ───────────────────────────────── */
+  const _onResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (window.innerWidth > 768 && isMenuOpen) _closeMenu();
+    }, 150);
   };
-  
-  /**
-   * Handle scroll events
-   */
-  const handleScroll = () => {
-    const currentScrollPosition = window.pageYOffset;
-    
-    updateHeaderOnScroll();
-    updateActiveNavLink(currentScrollPosition);
-    
-    lastScrollPosition = currentScrollPosition;
+
+  /* ── Header scrolled ─────────────────────────────────── */
+  const _updateHeader = () => {
+    if (!header) return;
+    header.classList.toggle('header--scrolled', window.scrollY > 50);
   };
-  
+
+  /* ── Scroll spy ──────────────────────────────────────── */
   /**
-   * Update header styling based on scroll position
+   * Lee offsetTop UNA vez por frame (gracias al throttle).
+   * Sin thrashing: no hay lecturas de layout intercaladas con escrituras.
    */
-  const updateHeaderOnScroll = () => {
-    if (window.pageYOffset > 50) {
-      header.classList.add('header--scrolled');
-    } else {
-      header.classList.remove('header--scrolled');
-    }
-  };
-  
-  /**
-   * Update active navigation link based on scroll position
-   */
-  const updateActiveNavLink = (scrollPosition) => {
-    const sections = document.querySelectorAll('section[id]');
-    
+  const _updateActiveLink = () => {
+    const sections   = document.querySelectorAll('section[id]');
+    const scrollMid  = window.scrollY + window.innerHeight / 3;
+
     sections.forEach(section => {
-      const sectionTop = section.offsetTop - 100;
-      const sectionBottom = sectionTop + section.offsetHeight;
-      const sectionId = section.getAttribute('id');
-      
-      if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+      const top    = section.offsetTop - 100;
+      const bottom = top + section.offsetHeight;
+      const id     = section.getAttribute('id');
+
+      if (scrollMid >= top && scrollMid < bottom) {
         navLinks.forEach(link => {
-          link.classList.remove('nav__link--active');
-          
-          if (link.getAttribute('href') === `#${sectionId}`) {
-            link.classList.add('nav__link--active');
-          }
+          const isActive = link.getAttribute('href') === `#${id}`;
+          link.classList.toggle('nav__link--active', isActive);
         });
       }
     });
   };
-  
-  /**
-   * Handle window resize
-   */
-  const handleResize = () => {
-    // Close mobile menu on resize to desktop
-    if (window.innerWidth > 768 && isMenuOpen) {
-      toggleMenu();
-    }
+
+  /* ── Menú móvil ──────────────────────────────────────── */
+  const _toggleMenu = () => {
+    isMenuOpen ? _closeMenu() : _openMenu();
   };
-  
-  // Public API
-  return {
-    init
+
+  const _openMenu = () => {
+    isMenuOpen = true;
+    navToggle.classList.add('nav__toggle--active');
+    navMenu.classList.add('nav__menu--active');
+    navToggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
   };
+
+  const _closeMenu = () => {
+    isMenuOpen = false;
+    navToggle.classList.remove('nav__toggle--active');
+    navMenu.classList.remove('nav__menu--active');
+    navToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+
+  const _handleNavLinkClick = (e) => {
+    if (isMenuOpen) _closeMenu();
+    navLinks.forEach(l => l.classList.remove('nav__link--active'));
+    e.currentTarget.classList.add('nav__link--active');
+  };
+
+  /* ── API pública ─────────────────────────────────────── */
+  return { init };
+
 })();
 
 export { navigation };
