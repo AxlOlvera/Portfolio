@@ -1,473 +1,513 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axl Olvera | Desarrollador Full Stack</title>
-    <meta name="description" content="Portafolio de desarrollo web - Proyectos y experiencia profesional">
-    
-    <!-- Fuentes -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Estilos -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/animations.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axl Olvera | Desarrollador Full Stack</title>
+  <meta name="description" content="Full Stack Developer portfolio showcasing Java, JavaScript, React, MySQL projects and team leadership experience in Scrum environments.">
+
+  <!--
+    FAVICON PERSONALIZADO
+    ─────────────────────────────────────────────
+    Coloca favicon.ico en la RAIZ del proyecto (misma carpeta que index.html).
+
+    Estructura recomendada:
+      /mi-portfolio/
+        index.html        <- aqui estas
+        favicon.ico       <- aqui va el favicon
+        css/
+          base.css
+          layout.css
+          components.css
+          animations.css
+        js/
+          main.js
+          portfolio.js
+          modules/
+            navigation.js
+            scroll-animations.js
+            form-handler.js
+            smooth-scroll.js
+
+    Genera tu favicon en: https://favicon.io
+    ─────────────────────────────────────────────
+  -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Devicon CDN - Iconos de tecnologias (seccion de Habilidades) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
+  <!-- Estilos del proyecto -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
 </head>
 <body>
-    <!-- Header & Navigation -->
-    <header class="header" id="header">
-        <nav class="nav">
-            <div class="nav__container">
-                <a href="#" class="nav__logo">
-                    <span class="nav__logo-text">AO</span>
-                </a>
-                
-                <ul class="nav__menu" id="navMenu">
-                    <li class="nav__item">
-                        <a href="#inicio" class="nav__link nav__link--active">Inicio</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="#sobre-mi" class="nav__link">Sobre mí</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="#proyectos" class="nav__link">Proyectos</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="#habilidades" class="nav__link">Habilidades</a>
-                    </li>
-                    <li class="nav__item">
-                        <a href="#contacto" class="nav__link">Contacto</a>
-                    </li>
-                </ul>
 
-                <button class="nav__toggle" id="navToggle" aria-label="Toggle navigation">
-                    <span class="nav__toggle-line"></span>
-                    <span class="nav__toggle-line"></span>
-                    <span class="nav__toggle-line"></span>
-                </button>
-            </div>
-        </nav>
-    </header>
+  <!-- HEADER Y NAVEGACION -->
+  <header class="header" id="header">
+    <nav class="nav">
+      <div class="nav__container">
 
-    <!-- Main Content -->
-    <main class="main">
-        <!-- Hero Section -->
-        <section class="hero" id="inicio">
-            <div class="hero__container">
-                <div class="hero__content">
-                    <p class="hero__greeting">Hola, soy</p>
-                    <h1 class="hero__title">
-                        <span class="hero__title-name">Mario Axl Sánchez Olvera</span>
-                        <span class="hero__title-role">Desarrollador Full Stack</span>
-                    </h1>
-                    <p class="hero__description">
-                        Creando experiencias digitales únicas con código limpio y diseño intencional. 
-                        Especializado en desarrollo web moderno y soluciones creativas.
-                    </p>
-                    <div class="hero__actions">
-                        <a href="#proyectos" class="btn btn--primary">Ver proyectos</a>
-                        <a href="#contacto" class="btn btn--secondary">Contactar</a>
-                    </div>
-                </div>
-                
-                <div class="hero__visual">
-                    <div class="hero__shape hero__shape--1"></div>
-                    <div class="hero__shape hero__shape--2"></div>
-                    <div class="hero__shape hero__shape--3"></div>
-                </div>
-            </div>
-            
-            <div class="hero__scroll">
-                <span class="hero__scroll-text">Scroll</span>
-                <svg class="hero__scroll-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 4V16M10 16L16 10M10 16L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-        </section>
+        <a href="#" class="nav__logo">
+          <span class="nav__logo-text">AO</span>
+        </a>
 
-        <!-- About Section -->
-        <section class="about" id="sobre-mi">
-            <div class="about__container">
-                <div class="about__content">
-                    <h2 class="section-title">
-                        <span class="section-title__number">01.</span>
-                        <span class="section-title__text">Sobre mí</span>
-                    </h2>
-                    
-                    <div class="about__text">
-                        <p class="about__paragraph">
-                            Desarrollador apasionado por crear soluciones web innovadoras y funcionales. 
-                            Mi enfoque combina habilidades técnicas sólidas con un ojo para el diseño y 
-                            la experiencia del usuario.
-                        </p>
-                        <p class="about__paragraph">
-                            Actualmente cursando el bootcamp de Generation México, donde he fortalecido 
-                            mis conocimientos en desarrollo Full Stack y metodologías ágiles. Me especializo 
-                            en transformar ideas en productos digitales que generan impacto.
-                        </p>
-                        <p class="about__paragraph">
-                            Cuando no estoy programando, me encontrarás explorando nuevas tecnologías, 
-                            contribuyendo a proyectos de código abierto o compartiendo conocimiento con 
-                            la comunidad de desarrolladores.
-                        </p>
-                    </div>
-                </div>
+        <ul class="nav__menu" id="navMenu">
+          <li class="nav__item">
+            <a href="#inicio"      class="nav__link nav__link--active" data-i18n="nav.inicio">Inicio</a>
+          </li>
+          <li class="nav__item">
+            <a href="#sobre-mi"    class="nav__link" data-i18n="nav.sobre">Sobre mi</a>
+          </li>
+          <li class="nav__item">
+            <a href="#proyectos"   class="nav__link" data-i18n="nav.proyectos">Proyectos</a>
+          </li>
+          <li class="nav__item">
+            <a href="#habilidades" class="nav__link" data-i18n="nav.habilidades">Habilidades</a>
+          </li>
+          <li class="nav__item">
+            <a href="#contacto"    class="nav__link" data-i18n="nav.contacto">Contacto</a>
+          </li>
+        </ul>
 
-                <div class="about__stats">
-                    <div class="stat-card">
-                        <div class="stat-card__icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <h3 class="stat-card__value">10+</h3>
-                        <p class="stat-card__label">Proyectos completados</p>
-                    </div>
+        <!-- Boton de cambio de idioma ES / EN -->
+        <button class="nav__lang-btn" id="langToggle" aria-label="Cambiar idioma / Change language">
+          <span id="langLabel">EN</span>
+        </button>
 
-                    <div class="stat-card">
-                        <div class="stat-card__icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M22 11.08V12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C15.3 2 18.23 3.64 20 6.19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <h3 class="stat-card__value">500+</h3>
-                        <p class="stat-card__label">Commits en GitHub</p>
-                    </div>
+        <button class="nav__toggle" id="navToggle" aria-label="Toggle navigation">
+          <span class="nav__toggle-line"></span>
+          <span class="nav__toggle-line"></span>
+          <span class="nav__toggle-line"></span>
+        </button>
 
-                    <div class="stat-card">
-                        <div class="stat-card__icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-                                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <h3 class="stat-card__value">15+</h3>
-                        <p class="stat-card__label">Tecnologías dominadas</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+      </div>
+    </nav>
+  </header>
 
-        <!-- Projects Section -->
-        <section class="projects" id="proyectos">
-            <div class="projects__container">
-                <h2 class="section-title">
-                    <span class="section-title__number">02.</span>
-                    <span class="section-title__text">Proyectos destacados</span>
-                </h2>
+  <main class="main">
 
-                <div class="projects__grid">
-                    <!-- Project Card 1 -->
-                    <article class="project-card project-card--featured">
-                        <div class="project-card__image">
-                            <div class="project-card__image-placeholder">
-                                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                                    <rect width="60" height="60" rx="8" fill="currentColor" opacity="0.1"/>
-                                    <path d="M20 25L30 35L40 25" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="project-card__content">
-                            <span class="project-card__tag">Destacado</span>
-                            <h3 class="project-card__title">E-commerce Platform</h3>
-                            <p class="project-card__description">
-                                Plataforma de comercio electrónico completa con carrito de compras, 
-                                gestión de inventario y pasarela de pagos. Desarrollada con arquitectura 
-                                escalable y responsive design.
-                            </p>
-                            <ul class="project-card__tech">
-                                <li class="project-card__tech-item">HTML5</li>
-                                <li class="project-card__tech-item">CSS3</li>
-                                <li class="project-card__tech-item">JavaScript</li>
-                                <li class="project-card__tech-item">API REST</li>
-                            </ul>
-                            <div class="project-card__links">
-                                <a href="#" class="project-card__link" aria-label="Ver código en GitHub">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M10 0C4.477 0 0 4.477 0 10C0 14.418 2.865 18.166 6.839 19.489C7.339 19.577 7.521 19.268 7.521 19.001C7.521 18.766 7.512 18.15 7.508 17.331C4.726 17.935 4.139 16.004 4.139 16.004C3.685 14.846 3.029 14.538 3.029 14.538C2.121 13.919 3.098 13.931 3.098 13.931C4.101 14.002 4.629 14.961 4.629 14.961C5.521 16.498 6.97 16.056 7.539 15.799C7.631 15.151 7.889 14.709 8.175 14.458C5.955 14.204 3.62 13.344 3.62 9.497C3.62 8.402 4.01 7.508 4.649 6.808C4.546 6.555 4.203 5.533 4.747 4.154C4.747 4.154 5.586 3.884 7.497 5.181C8.31 4.959 9.16 4.848 10.01 4.844C10.86 4.848 11.71 4.959 12.524 5.181C14.434 3.884 15.272 4.154 15.272 4.154C15.817 5.533 15.474 6.555 15.371 6.808C16.011 7.508 16.396 8.402 16.396 9.497C16.396 13.354 14.058 14.201 11.829 14.449C12.183 14.759 12.509 15.371 12.509 16.307C12.509 17.646 12.497 18.727 12.497 19.001C12.497 19.271 12.677 19.583 13.184 19.488C17.155 18.163 20.017 14.417 20.017 10C20.017 4.477 15.54 0 10 0Z" fill="currentColor"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="project-card__link" aria-label="Ver proyecto en vivo">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M18 11C18 14.866 14.866 18 11 18C7.134 18 4 14.866 4 11C4 7.134 7.134 4 11 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                        <path d="M18 4L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                        <path d="M13 4H18V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Project Card 2 -->
-                    <article class="project-card">
-                        <div class="project-card__image">
-                            <div class="project-card__image-placeholder">
-                                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                                    <rect width="60" height="60" rx="8" fill="currentColor" opacity="0.1"/>
-                                    <circle cx="30" cy="30" r="12" stroke="currentColor" stroke-width="3"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="project-card__content">
-                            <h3 class="project-card__title">Task Manager App</h3>
-                            <p class="project-card__description">
-                                Aplicación de gestión de tareas con funcionalidades de CRUD, filtros 
-                                avanzados y persistencia de datos con localStorage.
-                            </p>
-                            <ul class="project-card__tech">
-                                <li class="project-card__tech-item">JavaScript ES6+</li>
-                                <li class="project-card__tech-item">CSS Grid</li>
-                                <li class="project-card__tech-item">LocalStorage</li>
-                            </ul>
-                            <div class="project-card__links">
-                                <a href="#" class="project-card__link" aria-label="Ver código en GitHub">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M10 0C4.477 0 0 4.477 0 10C0 14.418 2.865 18.166 6.839 19.489C7.339 19.577 7.521 19.268 7.521 19.001C7.521 18.766 7.512 18.15 7.508 17.331C4.726 17.935 4.139 16.004 4.139 16.004C3.685 14.846 3.029 14.538 3.029 14.538C2.121 13.919 3.098 13.931 3.098 13.931C4.101 14.002 4.629 14.961 4.629 14.961C5.521 16.498 6.97 16.056 7.539 15.799C7.631 15.151 7.889 14.709 8.175 14.458C5.955 14.204 3.62 13.344 3.62 9.497C3.62 8.402 4.01 7.508 4.649 6.808C4.546 6.555 4.203 5.533 4.747 4.154C4.747 4.154 5.586 3.884 7.497 5.181C8.31 4.959 9.16 4.848 10.01 4.844C10.86 4.848 11.71 4.959 12.524 5.181C14.434 3.884 15.272 4.154 15.272 4.154C15.817 5.533 15.474 6.555 15.371 6.808C16.011 7.508 16.396 8.402 16.396 9.497C16.396 13.354 14.058 14.201 11.829 14.449C12.183 14.759 12.509 15.371 12.509 16.307C12.509 17.646 12.497 18.727 12.497 19.001C12.497 19.271 12.677 19.583 13.184 19.488C17.155 18.163 20.017 14.417 20.017 10C20.017 4.477 15.54 0 10 0Z" fill="currentColor"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="project-card__link" aria-label="Ver proyecto en vivo">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M18 11C18 14.866 14.866 18 11 18C7.134 18 4 14.866 4 11C4 7.134 7.134 4 11 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                        <path d="M18 4L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                        <path d="M13 4H18V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Project Card 3 -->
-                    <article class="project-card">
-                        <div class="project-card__image">
-                            <div class="project-card__image-placeholder">
-                                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                                    <rect width="60" height="60" rx="8" fill="currentColor" opacity="0.1"/>
-                                    <rect x="15" y="15" width="30" height="30" rx="4" stroke="currentColor" stroke-width="3"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="project-card__content">
-                            <h3 class="project-card__title">Weather Dashboard</h3>
-                            <p class="project-card__description">
-                                Dashboard interactivo del clima consumiendo API externa. Incluye búsqueda 
-                                por ciudad, pronóstico extendido y visualización de datos.
-                            </p>
-                            <ul class="project-card__tech">
-                                <li class="project-card__tech-item">API Integration</li>
-                                <li class="project-card__tech-item">Async/Await</li>
-                                <li class="project-card__tech-item">Charts</li>
-                            </ul>
-                            <div class="project-card__links">
-                                <a href="#" class="project-card__link" aria-label="Ver código en GitHub">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M10 0C4.477 0 0 4.477 0 10C0 14.418 2.865 18.166 6.839 19.489C7.339 19.577 7.521 19.268 7.521 19.001C7.521 18.766 7.512 18.15 7.508 17.331C4.726 17.935 4.139 16.004 4.139 16.004C3.685 14.846 3.029 14.538 3.029 14.538C2.121 13.919 3.098 13.931 3.098 13.931C4.101 14.002 4.629 14.961 4.629 14.961C5.521 16.498 6.97 16.056 7.539 15.799C7.631 15.151 7.889 14.709 8.175 14.458C5.955 14.204 3.62 13.344 3.62 9.497C3.62 8.402 4.01 7.508 4.649 6.808C4.546 6.555 4.203 5.533 4.747 4.154C4.747 4.154 5.586 3.884 7.497 5.181C8.31 4.959 9.16 4.848 10.01 4.844C10.86 4.848 11.71 4.959 12.524 5.181C14.434 3.884 15.272 4.154 15.272 4.154C15.817 5.533 15.474 6.555 15.371 6.808C16.011 7.508 16.396 8.402 16.396 9.497C16.396 13.354 14.058 14.201 11.829 14.449C12.183 14.759 12.509 15.371 12.509 16.307C12.509 17.646 12.497 18.727 12.497 19.001C12.497 19.271 12.677 19.583 13.184 19.488C17.155 18.163 20.017 14.417 20.017 10C20.017 4.477 15.54 0 10 0Z" fill="currentColor"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="project-card__link" aria-label="Ver proyecto en vivo">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M18 11C18 14.866 14.866 18 11 18C7.134 18 4 14.866 4 11C4 7.134 7.134 4 11 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                        <path d="M18 4L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                        <path d="M13 4H18V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section class="skills" id="habilidades">
-            <div class="skills__container">
-                <h2 class="section-title">
-                    <span class="section-title__number">03.</span>
-                    <span class="section-title__text">Habilidades técnicas</span>
-                </h2>
-
-                <div class="skills__grid">
-                    <div class="skill-category">
-                        <h3 class="skill-category__title">Frontend</h3>
-                        <ul class="skill-category__list">
-                            <li class="skill-item">
-                                <span class="skill-item__name">HTML5</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 90%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">CSS3 / SASS</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 85%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">JavaScript ES6+</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 80%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">React</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 75%"></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="skill-category">
-                        <h3 class="skill-category__title">Backend</h3>
-                        <ul class="skill-category__list">
-                            <li class="skill-item">
-                                <span class="skill-item__name">Node.js</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 70%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">Express</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 75%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">MySQL</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 65%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">API REST</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 80%"></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="skill-category">
-                        <h3 class="skill-category__title">Herramientas</h3>
-                        <ul class="skill-category__list">
-                            <li class="skill-item">
-                                <span class="skill-item__name">Git & GitHub</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 85%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">VS Code</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 90%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">Figma</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 70%"></div>
-                                </div>
-                            </li>
-                            <li class="skill-item">
-                                <span class="skill-item__name">Responsive Design</span>
-                                <div class="skill-item__bar">
-                                    <div class="skill-item__progress" style="--progress: 88%"></div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section class="contact" id="contacto">
-            <div class="contact__container">
-                <h2 class="section-title">
-                    <span class="section-title__number">04.</span>
-                    <span class="section-title__text">Contacto</span>
-                </h2>
-
-                <div class="contact__content">
-                    <div class="contact__info">
-                        <h3 class="contact__subtitle">¿Trabajamos juntos?</h3>
-                        <p class="contact__text">
-                            Estoy disponible para nuevos proyectos y colaboraciones. 
-                            Si tienes una idea en mente o simplemente quieres saludar, 
-                            no dudes en contactarme.
-                        </p>
-                        
-                        <div class="contact__methods">
-                            <a href="mailto:tu.email@ejemplo.com" class="contact__method">
-                                <svg class="contact__method-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <span>tu.email@ejemplo.com</span>
-                            </a>
-
-                            <a href="https://github.com/tuusuario" class="contact__method" target="_blank" rel="noopener noreferrer">
-                                <svg class="contact__method-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 0C5.374 0 0 5.373 0 12C0 17.302 3.438 21.8 8.207 23.387C8.806 23.498 9 23.126 9 22.81V20.576C5.662 21.302 4.967 19.16 4.967 19.16C4.421 17.773 3.634 17.404 3.634 17.404C2.545 16.659 3.717 16.675 3.717 16.675C4.922 16.759 5.556 17.912 5.556 17.912C6.626 19.746 8.363 19.216 9.048 18.909C9.155 18.134 9.466 17.604 9.81 17.305C7.145 17 4.343 15.971 4.343 11.374C4.343 10.063 4.812 8.993 5.579 8.153C5.455 7.85 5.044 6.629 5.696 4.977C5.696 4.977 6.704 4.655 8.997 6.207C9.954 5.941 10.98 5.808 12 5.803C13.02 5.808 14.047 5.941 15.006 6.207C17.297 4.655 18.303 4.977 18.303 4.977C18.956 6.63 18.545 7.851 18.421 8.153C19.191 8.993 19.656 10.064 19.656 11.374C19.656 15.983 16.849 16.998 14.177 17.295C14.607 17.667 15 18.397 15 19.517V22.81C15 23.129 15.192 23.504 15.801 23.386C20.566 21.797 24 17.3 24 12C24 5.373 18.627 0 12 0Z" fill="currentColor"/>
-                                </svg>
-                                <span>github.com/tuusuario</span>
-                            </a>
-
-                            <a href="https://linkedin.com/in/tuusuario" class="contact__method" target="_blank" rel="noopener noreferrer">
-                                <svg class="contact__method-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M20.447 20.452H16.893V14.883C16.893 13.555 16.866 11.846 15.041 11.846C13.188 11.846 12.905 13.291 12.905 14.785V20.452H9.351V9H12.765V10.561H12.811C13.288 9.661 14.448 8.711 16.181 8.711C19.782 8.711 20.448 11.081 20.448 14.166V20.452H20.447ZM5.337 7.433C4.193 7.433 3.274 6.507 3.274 5.368C3.274 4.23 4.194 3.305 5.337 3.305C6.477 3.305 7.401 4.23 7.401 5.368C7.401 6.507 6.476 7.433 5.337 7.433ZM7.119 20.452H3.555V9H7.119V20.452ZM22.225 0H1.771C0.792 0 0 0.774 0 1.729V22.271C0 23.227 0.792 24 1.771 24H22.222C23.2 24 24 23.227 24 22.271V1.729C24 0.774 23.2 0 22.222 0H22.225Z" fill="currentColor"/>
-                                </svg>
-                                <span>linkedin.com/in/tuusuario</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <form class="contact__form" id="contactForm">
-                        <div class="form-group">
-                            <label for="name" class="form-group__label">Nombre</label>
-                            <input type="text" id="name" name="name" class="form-group__input" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email" class="form-group__label">Email</label>
-                            <input type="email" id="email" name="email" class="form-group__input" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message" class="form-group__label">Mensaje</label>
-                            <textarea id="message" name="message" class="form-group__textarea" rows="5" required></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn--primary btn--full">
-                            Enviar mensaje
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer__container">
-            <p class="footer__text">
-                Diseñado y desarrollado por <strong>Mario Axl Sánchez Olvera</strong>
-            </p>
-            <p class="footer__copy">
-                © 2026 Todos los derechos reservados
-            </p>
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+      <div class="hero__container">
+        <div class="hero__content">
+          <p class="hero__greeting" data-i18n="hero.greeting">Hola, soy</p>
+          <h1 class="hero__title">
+            <span class="hero__title-name">Mario Axl Sanchez Olvera</span>
+            <span class="hero__title-role" data-i18n="hero.role">Full Stack Developer &amp; Lider de Equipo</span>
+          </h1>
+          <p class="hero__description" data-i18n="hero.description">
+            Especializado en Java, Spring Boot, JavaScript y React, con experiencia en liderazgo operativo para construir soluciones escalables y centradas en el usuario.
+          </p>
+          <div class="hero__actions">
+            <a href="#proyectos" class="btn btn--primary"   data-i18n="hero.cta.projects">Ver proyectos</a>
+            <a href="#contacto"  class="btn btn--secondary" data-i18n="hero.cta.contact">Contactar</a>
+          </div>
         </div>
-    </footer>
 
-    <!-- JavaScript -->
-    <script type="module" src="js/main.js"></script>
+        <div class="hero__visual">
+          <div class="hero__shape hero__shape--1"></div>
+          <div class="hero__shape hero__shape--2"></div>
+          <div class="hero__shape hero__shape--3"></div>
+        </div>
+      </div>
+
+      <div class="hero__scroll">
+        <span class="hero__scroll-text">Scroll</span>
+        <svg class="hero__scroll-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 4V16M10 16L16 10M10 16L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- SOBRE MI -->
+    <section class="about" id="sobre-mi">
+      <div class="about__container">
+
+        <div class="about__content">
+          <h2 class="section-title">
+            <span class="section-title__number">01.</span>
+            <span class="section-title__text" data-i18n="about.title">Sobre mi</span>
+          </h2>
+          <div class="about__text">
+            <p class="about__paragraph" data-i18n="about.paragraph">
+              Con mas de 6 anos de experiencia en entornos bilingues de alto volumen (ingles C1), transicione de supervisar equipos de 25 personas y gestionar KPIs al desarrollo de aplicaciones web full stack. Aplico una mentalidad de gestion de proyectos enfocada en metodologias Scrum, documentacion clara, resolucion estructurada de problemas y colaboracion eficiente en equipo, en cada proyecto al que contribuyo.
+            </p>
+          </div>
+        </div>
+
+        <!-- Stat Cards - informacion profesional real (sin metricas inventadas) -->
+        <div class="about__stats">
+
+          <!-- Card 1: Trabajo en equipo -->
+          <div class="stat-card">
+            <div class="stat-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="stat-card__value" data-i18n="about.card1.title">Trabajo en equipo</h3>
+            <p class="stat-card__label" data-i18n="about.card1.desc">Experiencia liderando equipos de hasta 25 personas y colaborando bajo metodologia Scrum.</p>
+          </div>
+
+          <!-- Card 2: Resolucion de problemas -->
+          <div class="stat-card">
+            <div class="stat-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="stat-card__value" data-i18n="about.card2.title">Resolucion de problemas</h3>
+            <p class="stat-card__label" data-i18n="about.card2.desc">Enfoque en analisis estructurado, documentacion clara y mejora continua.</p>
+          </div>
+
+          <!-- Card 3: Desarrollo Full Stack -->
+          <div class="stat-card">
+            <div class="stat-card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17"           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12"           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="stat-card__value" data-i18n="about.card3.title">Desarrollo Full Stack</h3>
+            <p class="stat-card__label" data-i18n="about.card3.desc">Experiencia en desarrollo web con Java, JavaScript, MySQL y Bootstrap.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PROYECTOS -->
+    <section class="projects" id="proyectos">
+      <div class="projects__container">
+        <h2 class="section-title">
+          <span class="section-title__number">02.</span>
+          <span class="section-title__text" data-i18n="projects.title">Proyectos destacados</span>
+        </h2>
+
+        <div class="projects__grid">
+
+          <!-- Proyecto Destacado: Ixel Artesanias -->
+          <article class="project-card project-card--featured">
+            <div class="project-card__image">
+              <div class="project-card__image-placeholder">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                  <rect width="60" height="60" rx="8" fill="currentColor" opacity="0.1"/>
+                  <path d="M20 25L30 35L40 25" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="project-card__content">
+              <span class="project-card__tag" data-i18n="projects.featured">Destacado</span>
+              <h3 class="project-card__title">Ixel Artesanias E-commerce</h3>
+              <p class="project-card__description">
+                <span data-i18n="projects.ixel.desc">Solucion e-commerce full stack desarrollada para una tienda artesanal real. Contribui al desarrollo frontend con JavaScript, HTML, CSS y Bootstrap, y apoyé la integracion backend con Java y MySQL.</span>
+                <br><br>
+                <strong data-i18n="projects.scrum.label">Gestion de proyecto:</strong>
+                <span data-i18n="projects.ixel.scrum"> Desarrollado bajo metodologia Scrum, con participacion en sprint planning, organizacion de tareas y documentacion tecnica para entrega al cliente.</span>
+              </p>
+              <ul class="project-card__tech">
+                <li class="project-card__tech-item">HTML5</li>
+                <li class="project-card__tech-item">CSS3</li>
+                <li class="project-card__tech-item">JavaScript</li>
+                <li class="project-card__tech-item">Bootstrap</li>
+                <li class="project-card__tech-item">Java</li>
+                <li class="project-card__tech-item">MySQL</li>
+              </ul>
+              <div class="project-card__links">
+                <a href="#" class="project-card__link" aria-label="Ver codigo en GitHub">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 0C4.477 0 0 4.477 0 10C0 14.418 2.865 18.166 6.839 19.489C7.339 19.577 7.521 19.268 7.521 19.001C7.521 18.766 7.512 18.15 7.508 17.331C4.726 17.935 4.139 16.004 4.139 16.004C3.685 14.846 3.029 14.538 3.029 14.538C2.121 13.919 3.098 13.931 3.098 13.931C4.101 14.002 4.629 14.961 4.629 14.961C5.521 16.498 6.97 16.056 7.539 15.799C7.631 15.151 7.889 14.709 8.175 14.458C5.955 14.204 3.62 13.344 3.62 9.497C3.62 8.402 4.01 7.508 4.649 6.808C4.546 6.555 4.203 5.533 4.747 4.154C4.747 4.154 5.586 3.884 7.497 5.181C8.31 4.959 9.16 4.848 10.01 4.844C10.86 4.848 11.71 4.959 12.524 5.181C14.434 3.884 15.272 4.154 15.272 4.154C15.817 5.533 15.474 6.555 15.371 6.808C16.011 7.508 16.396 8.402 16.396 9.497C16.396 13.354 14.058 14.201 11.829 14.449C12.183 14.759 12.509 15.371 12.509 16.307C12.509 17.646 12.497 18.727 12.497 19.001C12.497 19.271 12.677 19.583 13.184 19.488C17.155 18.163 20.017 14.417 20.017 10C20.017 4.477 15.54 0 10 0Z" fill="currentColor"/>
+                  </svg>
+                </a>
+                <a href="#" class="project-card__link" aria-label="Ver proyecto en vivo">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M18 11C18 14.866 14.866 18 11 18C7.134 18 4 14.866 4 11C4 7.134 7.134 4 11 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M18 4L11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M13 4H18V9"  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Proyecto: E-commerce Hackaton -->
+          <article class="project-card">
+            <div class="project-card__image">
+              <div class="project-card__image-placeholder">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                  <rect width="60" height="60" rx="8" fill="currentColor" opacity="0.1"/>
+                  <circle cx="30" cy="30" r="12" stroke="currentColor" stroke-width="3"/>
+                  <path d="M26 30h8M30 26v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="project-card__content">
+              <h3 class="project-card__title">E-commerce Hackaton</h3>
+              <p class="project-card__description" data-i18n="projects.hackaton.desc">
+                Aplicacion web tipo e-commerce desarrollada en hackaton, con carrito de compras, validaciones en JavaScript y uso de Local Storage.
+              </p>
+              <ul class="project-card__tech">
+                <li class="project-card__tech-item">JavaScript</li>
+                <li class="project-card__tech-item">HTML5</li>
+                <li class="project-card__tech-item">CSS3</li>
+                <li class="project-card__tech-item">LocalStorage</li>
+              </ul>
+              <div class="project-card__links">
+                <!-- Reemplaza href con el link real de tu repositorio -->
+                <a href="https://github.com/AxlOlvera" target="_blank" rel="noopener noreferrer" class="project-card__link" aria-label="Ver codigo en GitHub">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 0C4.477 0 0 4.477 0 10C0 14.418 2.865 18.166 6.839 19.489C7.339 19.577 7.521 19.268 7.521 19.001C7.521 18.766 7.512 18.15 7.508 17.331C4.726 17.935 4.139 16.004 4.139 16.004C3.685 14.846 3.029 14.538 3.029 14.538C2.121 13.919 3.098 13.931 3.098 13.931C4.101 14.002 4.629 14.961 4.629 14.961C5.521 16.498 6.97 16.056 7.539 15.799C7.631 15.151 7.889 14.709 8.175 14.458C5.955 14.204 3.62 13.344 3.62 9.497C3.62 8.402 4.01 7.508 4.649 6.808C4.546 6.555 4.203 5.533 4.747 4.154C4.747 4.154 5.586 3.884 7.497 5.181C8.31 4.959 9.16 4.848 10.01 4.844C10.86 4.848 11.71 4.959 12.524 5.181C14.434 3.884 15.272 4.154 15.272 4.154C15.817 5.533 15.474 6.555 15.371 6.808C16.011 7.508 16.396 8.402 16.396 9.497C16.396 13.354 14.058 14.201 11.829 14.449C12.183 14.759 12.509 15.371 12.509 16.307C12.509 17.646 12.497 18.727 12.497 19.001C12.497 19.271 12.677 19.583 13.184 19.488C17.155 18.163 20.017 14.417 20.017 10C20.017 4.477 15.54 0 10 0Z" fill="currentColor"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Proyecto: Agenda en Consola - Java -->
+          <article class="project-card">
+            <div class="project-card__image">
+              <div class="project-card__image-placeholder">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                  <rect width="60" height="60" rx="8" fill="currentColor" opacity="0.1"/>
+                  <rect x="15" y="15" width="30" height="30" rx="4" stroke="currentColor" stroke-width="3"/>
+                  <path d="M22 30h16M22 24h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="project-card__content">
+              <h3 class="project-card__title">Agenda en Consola - Java</h3>
+              <p class="project-card__description" data-i18n="projects.agenda.desc">
+                Aplicacion en Java ejecutable en consola para gestion de contactos, implementando estructuras de datos y logica orientada a objetos.
+              </p>
+              <ul class="project-card__tech">
+                <li class="project-card__tech-item">Java</li>
+                <li class="project-card__tech-item">OOP</li>
+                <li class="project-card__tech-item">Estructuras de datos</li>
+              </ul>
+              <div class="project-card__links">
+                <!-- Reemplaza href con el link real de tu repositorio -->
+                <a href="https://github.com/AxlOlvera" target="_blank" rel="noopener noreferrer" class="project-card__link" aria-label="Ver codigo en GitHub">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 0C4.477 0 0 4.477 0 10C0 14.418 2.865 18.166 6.839 19.489C7.339 19.577 7.521 19.268 7.521 19.001C7.521 18.766 7.512 18.15 7.508 17.331C4.726 17.935 4.139 16.004 4.139 16.004C3.685 14.846 3.029 14.538 3.029 14.538C2.121 13.919 3.098 13.931 3.098 13.931C4.101 14.002 4.629 14.961 4.629 14.961C5.521 16.498 6.97 16.056 7.539 15.799C7.631 15.151 7.889 14.709 8.175 14.458C5.955 14.204 3.62 13.344 3.62 9.497C3.62 8.402 4.01 7.508 4.649 6.808C4.546 6.555 4.203 5.533 4.747 4.154C4.747 4.154 5.586 3.884 7.497 5.181C8.31 4.959 9.16 4.848 10.01 4.844C10.86 4.848 11.71 4.959 12.524 5.181C14.434 3.884 15.272 4.154 15.272 4.154C15.817 5.533 15.474 6.555 15.371 6.808C16.011 7.508 16.396 8.402 16.396 9.497C16.396 13.354 14.058 14.201 11.829 14.449C12.183 14.759 12.509 15.371 12.509 16.307C12.509 17.646 12.497 18.727 12.497 19.001C12.497 19.271 12.677 19.583 13.184 19.488C17.155 18.163 20.017 14.417 20.017 10C20.017 4.477 15.54 0 10 0Z" fill="currentColor"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- HABILIDADES - Iconos Devicon (barras eliminadas) -->
+    <section class="skills" id="habilidades">
+      <div class="skills__container">
+        <h2 class="section-title">
+          <span class="section-title__number">03.</span>
+          <span class="section-title__text" data-i18n="skills.title">Habilidades tecnicas</span>
+        </h2>
+
+        <div class="skills__grid--icons">
+
+          <!-- Frontend -->
+          <div class="skill-category">
+            <h3 class="skill-category__title" data-i18n="skills.frontend">Frontend</h3>
+            <div class="skill-category__icons">
+              <div class="skill-icon-item">
+                <i class="devicon-html5-plain colored"></i>
+                <span>HTML5</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-css3-plain colored"></i>
+                <span>CSS3</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-javascript-plain colored"></i>
+                <span>JavaScript</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-bootstrap-plain colored"></i>
+                <span>Bootstrap</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-react-original colored"></i>
+                <span>React</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Backend -->
+          <div class="skill-category">
+            <h3 class="skill-category__title" data-i18n="skills.backend">Backend</h3>
+            <div class="skill-category__icons">
+              <div class="skill-icon-item">
+                <i class="devicon-java-plain colored"></i>
+                <span>Java</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-spring-plain colored"></i>
+                <span>Spring Boot</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-mysql-plain colored"></i>
+                <span>MySQL</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Herramientas -->
+          <div class="skill-category">
+            <h3 class="skill-category__title" data-i18n="skills.tools">Herramientas</h3>
+            <div class="skill-category__icons">
+              <div class="skill-icon-item">
+                <i class="devicon-git-plain colored"></i>
+                <span>Git</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-github-original colored"></i>
+                <span>GitHub</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-postman-plain colored"></i>
+                <span>Postman</span>
+              </div>
+              <div class="skill-icon-item">
+                <i class="devicon-vscode-plain colored"></i>
+                <span>VS Code</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="contact" id="contacto">
+      <div class="contact__container">
+        <h2 class="section-title">
+          <span class="section-title__number">04.</span>
+          <span class="section-title__text" data-i18n="contact.title">Contacto</span>
+        </h2>
+
+        <div class="contact__content">
+
+          <div class="contact__info">
+            <h3 class="contact__subtitle" data-i18n="contact.subtitle">Trabajamos juntos?</h3>
+            <p class="contact__text" data-i18n="contact.text">
+              Estoy disponible para nuevos proyectos y colaboraciones. Si tienes una idea en mente o simplemente quieres saludar, no dudes en contactarme.
+            </p>
+
+            <div class="contact__methods">
+
+              <!-- Correo actualizado -->
+              <a href="mailto:Axl.sanchezolvera@gmail.com" class="contact__method">
+                <svg class="contact__method-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Axl.sanchezolvera@gmail.com</span>
+              </a>
+
+              <!-- GitHub actualizado -->
+              <a href="https://github.com/AxlOlvera" class="contact__method" target="_blank" rel="noopener noreferrer">
+                <svg class="contact__method-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 0C5.374 0 0 5.373 0 12C0 17.302 3.438 21.8 8.207 23.387C8.806 23.498 9 23.126 9 22.81V20.576C5.662 21.302 4.967 19.16 4.967 19.16C4.421 17.773 3.634 17.404 3.634 17.404C2.545 16.659 3.717 16.675 3.717 16.675C4.922 16.759 5.556 17.912 5.556 17.912C6.626 19.746 8.363 19.216 9.048 18.909C9.155 18.134 9.466 17.604 9.81 17.305C7.145 17 4.343 15.971 4.343 11.374C4.343 10.063 4.812 8.993 5.579 8.153C5.455 7.85 5.044 6.629 5.696 4.977C5.696 4.977 6.704 4.655 8.997 6.207C9.954 5.941 10.98 5.808 12 5.803C13.02 5.808 14.047 5.941 15.006 6.207C17.297 4.655 18.303 4.977 18.303 4.977C18.956 6.63 18.545 7.851 18.421 8.153C19.191 8.993 19.656 10.064 19.656 11.374C19.656 15.983 16.849 16.998 14.177 17.295C14.607 17.667 15 18.397 15 19.517V22.81C15 23.129 15.192 23.504 15.801 23.386C20.566 21.797 24 17.3 24 12C24 5.373 18.627 0 12 0Z" fill="currentColor"/>
+                </svg>
+                <span>github.com/AxlOlvera</span>
+              </a>
+
+              <!-- LinkedIn actualizado -->
+              <a href="https://www.linkedin.com/in/axl-sanchez/" class="contact__method" target="_blank" rel="noopener noreferrer">
+                <svg class="contact__method-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M20.447 20.452H16.893V14.883C16.893 13.555 16.866 11.846 15.041 11.846C13.188 11.846 12.905 13.291 12.905 14.785V20.452H9.351V9H12.765V10.561H12.811C13.288 9.661 14.448 8.711 16.181 8.711C19.782 8.711 20.448 11.081 20.448 14.166V20.452H20.447ZM5.337 7.433C4.193 7.433 3.274 6.507 3.274 5.368C3.274 4.23 4.194 3.305 5.337 3.305C6.477 3.305 7.401 4.23 7.401 5.368C7.401 6.507 6.476 7.433 5.337 7.433ZM7.119 20.452H3.555V9H7.119V20.452ZM22.225 0H1.771C0.792 0 0 0.774 0 1.729V22.271C0 23.227 0.792 24 1.771 24H22.222C23.2 24 24 23.227 24 22.271V1.729C24 0.774 23.2 0 22.222 0H22.225Z" fill="currentColor"/>
+                </svg>
+                <span>linkedin.com/in/axl-sanchez</span>
+              </a>
+
+            </div>
+          </div>
+
+          <!-- Formulario de contacto con EmailJS -->
+          <form class="contact__form" id="contactForm" novalidate>
+            <div class="form-group">
+              <label for="name" class="form-group__label" data-i18n="contact.form.name">Nombre</label>
+              <input type="text" id="name" name="name" class="form-group__input" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-group__label" data-i18n="contact.form.email">Email</label>
+              <input type="email" id="email" name="email" class="form-group__input" required>
+            </div>
+
+            <div class="form-group">
+              <label for="message" class="form-group__label" data-i18n="contact.form.message">Mensaje</label>
+              <textarea id="message" name="message" class="form-group__textarea" rows="5" required></textarea>
+            </div>
+
+            <!-- Mensajes de feedback controlados por portfolio.js -->
+            <div class="form-feedback form-feedback--success" id="formSuccess" role="alert">
+              Mensaje enviado con exito! Te respondere pronto.
+            </div>
+            <div class="form-feedback form-feedback--error" id="formError" role="alert">
+              Hubo un error al enviar. Por favor intenta de nuevo.
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--full" id="submitBtn" data-i18n="contact.form.send">
+              Enviar mensaje
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__container">
+      <p class="footer__text">
+        <span data-i18n="footer.designed">Disenado y desarrollado por</span>
+        <strong>Mario Axl Sanchez Olvera</strong>
+      </p>
+      <p class="footer__copy">
+        &copy; 2026 <span data-i18n="footer.rights">Todos los derechos reservados</span>
+      </p>
+    </div>
+  </footer>
+
+  <!--
+    EmailJS CDN - debe cargarse ANTES de portfolio.js
+    para que la variable global emailjs este disponible
+  -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <!--
+    main.js - modulo ES6 existente (navigation, scroll, smooth scroll)
+    No se modifica para no romper la arquitectura de imports existente
+  -->
+  <script type="module" src="js/main.js"></script>
+
+  <!--
+    portfolio.js - nuevo script (idioma + EmailJS)
+    Se carga como script normal (no module) para compatibilidad
+    con el CDN de EmailJS que usa variables globales
+  -->
+  <script src="js/portfolio.js"></script>
+
 </body>
 </html>

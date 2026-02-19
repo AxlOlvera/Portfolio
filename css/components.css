@@ -468,6 +468,106 @@
   min-height: 120px;
 }
 
+/* ============================================
+   NUEVOS COMPONENTES – portfolio.js
+   ============================================ */
+
+/* Botón de idioma en el navbar */
+.nav__lang-btn {
+  background: transparent;
+  border: 2px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-transform: uppercase;
+}
+
+.nav__lang-btn:hover {
+  border-color: var(--color-highlight);
+  color: var(--color-highlight);
+  transform: translateY(-1px);
+}
+
+/* Habilidades con íconos Devicon */
+.skills__grid--icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3xl);
+  margin-top: var(--space-3xl);
+}
+
+.skill-category__icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xl);
+  margin-top: var(--space-lg);
+}
+
+.skill-icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-align: center;
+  transition: transform var(--transition-base);
+}
+
+.skill-icon-item:hover {
+  transform: translateY(-4px);
+  color: var(--color-primary);
+}
+
+.skill-icon-item i {
+  font-size: 2.5rem;
+  transition: transform var(--transition-base);
+}
+
+/* Feedback del formulario (éxito / error) */
+.form-feedback {
+  display: none;
+  padding: 0.85rem 1rem;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-md);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.form-feedback--success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.form-feedback--error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.form-feedback.visible {
+  display: block;
+}
+
+/* Stat card: ajuste para texto largo en value */
+.stat-card__value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--space-xs);
+  line-height: var(--line-height-tight);
+}
+
 /* Responsive Components */
 @media (max-width: 1024px) {
   .project-card--featured {
