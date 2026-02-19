@@ -149,15 +149,41 @@
 .main { margin-top: 68px; }
 
 /* ── Section Rhythm ───────────────────────────────── */
+/* Base reset — no section gets a default background here.
+   Each section is assigned explicitly below.
+   This is intentional: nth-child alternation is fragile
+   because adding/removing sections breaks the whole sequence. */
 section {
-  padding:   var(--space-5xl) 0;
-  position:  relative;
+  padding:  var(--space-5xl) 0;
+  position: relative;
 }
 
-/* Even sections use the cool-gray alternate surface.
-   This alternating rhythm guides the eye down the page. */
-section:nth-child(even) {
-  background-color: var(--color-surface-alt);
+/* ── Per-section backgrounds ──────────────────────────
+   Each section gets a named, deliberate background.
+   The deltas between values are small but perceptible —
+   the eye reads them as "rooms", creating rhythm without
+   using color in a way that feels designed or decorative.
+
+   Sequence logic:
+     Hero      → warm parchment (welcoming)
+     Sobre mí  → pure white (cards pop, open feel)
+     Proyectos → cool blue-gray (importance marker)
+     Habilidades→ warm near-white (soft pause, breathe)
+     Contacto  → deeper cool (grounded, final)
+*/
+.hero     { background-color: var(--bg-hero);     }
+.about    { background-color: var(--bg-about);    }
+.projects { background-color: var(--bg-projects); }
+.skills   { background-color: var(--bg-skills);   }
+.contact  { background-color: var(--bg-contact);  }
+
+/* Thin top border on alternating sections — architectural
+   separator. 1px, barely-there, just enough structure. */
+.about,
+.projects,
+.skills,
+.contact {
+  border-top: 1px solid var(--color-border-light);
 }
 
 /* ── Container Utility ────────────────────────────── */
@@ -173,16 +199,22 @@ section:nth-child(even) {
 
 /* ── Hero Layout ──────────────────────────────────── */
 .hero {
-  /* Layered background: warm canvas + very subtle radial
-     gradient creates dimensionality without being garish */
+  /* Three-layer background system:
+     1. Top-right blue bloom — corporate depth, suggests
+        technology without being obvious about it
+     2. Bottom-left gold warmth — grounds the gold accent
+        used throughout (section numbers, underlines)
+     3. Warm parchment base — not white, not gray
+     The blooms are ~6-8% opacity, not 3-4% — that was
+     too invisible. This is still subtle but READABLE. */
   background:
-    radial-gradient(ellipse 80% 60% at 70% 40%,
-      rgba(30, 74, 140, 0.04) 0%,
-      transparent 70%),
-    radial-gradient(ellipse 50% 40% at 20% 80%,
-      rgba(170, 136, 71, 0.03) 0%,
-      transparent 60%),
-    var(--color-canvas);
+    radial-gradient(ellipse 65% 55% at 78% 30%,
+      rgba(26, 60, 110, 0.07) 0%,
+      transparent 65%),
+    radial-gradient(ellipse 45% 40% at 18% 85%,
+      rgba(170, 136, 71, 0.06) 0%,
+      transparent 55%),
+    var(--bg-hero);
 
   min-height: calc(100vh - 68px);
   display:    flex;
@@ -191,15 +223,33 @@ section:nth-child(even) {
   overflow:   hidden;
 }
 
-/* Subtle grid texture overlay — architectural drafting paper feel */
+/* Architectural grid overlay — bumped from 0.025 → 0.04
+   opacity so it's actually visible on the warm background.
+   Evokes blueprint / drafting paper / technical precision. */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(68, 84, 106, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(68, 84, 106, 0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
+    linear-gradient(rgba(44, 64, 90, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(44, 64, 90, 0.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Diagonal gradient overlay — very faint, adds dimension
+   so the hero reads as "intentionally designed" rather
+   than "left on default". Runs bottom-left → top-right. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 40%,
+    rgba(235, 240, 247, 0.55) 100%
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -262,6 +312,10 @@ section:nth-child(even) {
 }
 
 /* ── Projects Layout ──────────────────────────────── */
+/* Projects section gets a cool blue-gray bg (--bg-projects).
+   Cards are white, so they float visibly above the background —
+   this contrast is the whole point. Gap increased so cards
+   don't crowd each other on the cool field. */
 .projects__grid {
   display:               grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -288,6 +342,9 @@ section:nth-child(even) {
 }
 
 /* ── Contact Layout ───────────────────────────────── */
+/* Contact sits on --bg-contact (deepest cool gray).
+   The form card is white on a noticeably different
+   surface — clear visual hierarchy at page close. */
 .contact__content {
   display:               grid;
   grid-template-columns: 1fr 1fr;
@@ -348,7 +405,7 @@ section:nth-child(even) {
     top:              68px; left: 0;
     width:            100%;
     height:           calc(100vh - 68px);
-    background-color: var(--color-surface);
+    background-color: var(--color-surface);   /* white panel on mobile */
     flex-direction:   column;
     justify-content:  center;
     gap:              var(--space-2xl);

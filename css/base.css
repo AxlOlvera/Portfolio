@@ -16,13 +16,35 @@
 /* ── CSS Variables ─────────────────────────────── */
 :root {
   /* ── Surfaces ─────────────────────────────────
-     Warm off-white base avoids the harshness of
-     pure white. Alternating section backgrounds
-     create depth without strong contrast. */
-  --color-canvas:      #F6F5F3;   /* Warm off-white, base bg */
+     Five-stop surface scale for named, intentional
+     section alternation. Each delta is ~3–4 L
+     points in HSL — enough for the eye to register
+     a new "room" without creating visual noise.
+
+     DO NOT use nth-child to alternate sections.
+     Instead, each section has its own explicit
+     background assigned by class in layout.css.
+     This is more predictable and maintainable.
+
+     Sequence (hero → contact):
+       hero     : warm parchment  — welcoming start
+       about    : pure white      — cards pop clearly
+       projects : cool blue-gray  — importance signal
+       skills   : warm near-white — softer breathing room
+       contact  : deeper cool     — grounding close
+  */
+  --color-canvas:      #F7F6F3;   /* Warm off-white — body bg */
   --color-surface:     #FFFFFF;   /* Card / elevated surfaces */
-  --color-surface-alt: #EFF1F4;   /* Section alternate bg – cool gray-blue tint */
-  --color-surface-dim: #E4E7EC;   /* Dividers, tertiary surfaces */
+  --color-surface-alt: #EEF0F5;   /* Cool gray-blue — projects, contact */
+  --color-surface-dim: #E3E6ED;   /* Dividers, input bg */
+  --color-surface-warm:#F4F3F0;   /* Warm near-white — skills */
+
+  /* Named per-section background tokens */
+  --bg-hero:     #F5F4F1;        /* Warm parchment */
+  --bg-about:    #FFFFFF;        /* Pure white — max card contrast */
+  --bg-projects: #EBF0F7;        /* Cool blue-gray — premium feel */
+  --bg-skills:   #F3F2EF;        /* Warm near-white — soft pause */
+  --bg-contact:  #E9EDF4;        /* Deeper cool gray — grounding close */
 
   /* ── Brand Navy ────────────────────────────────
      Deep navy is authoritative without being harsh.
@@ -48,7 +70,7 @@
   --color-bg-primary:   var(--color-canvas);
   --color-bg-secondary: var(--color-surface-alt);
   --color-bg-tertiary:  var(--color-surface-dim);
-  --color-highlight:    var(--color-gold);  /* replaces red accent */
+  --color-highlight:    var(--color-gold);
 
   /* ── Borders ─────────────────────────────────── */
   --color-border:       #DDE1E9;
@@ -95,9 +117,9 @@
   --space-lg:  1.5rem;   /* 24px */
   --space-xl:  2rem;     /* 32px */
   --space-2xl: 3rem;     /* 48px */
-  --space-3xl: 4rem;     /* 64px */
-  --space-4xl: 5.5rem;   /* 88px */
-  --space-5xl: 7rem;     /* 112px */
+  --space-3xl: 4.5rem;   /* 72px  ↑ was 4rem */
+  --space-4xl: 6rem;     /* 96px  ↑ was 5.5rem */
+  --space-5xl: 8rem;     /* 128px ↑ was 7rem — more section breathing room */
 
   /* ── Layout ───────────────────────────────────── */
   --container-max-width: 1160px;
