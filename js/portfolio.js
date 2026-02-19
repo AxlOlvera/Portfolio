@@ -16,17 +16,7 @@
  *  en blur/input. Este archivo registra el submit. De esta forma
  *  no hay double binding ni race conditions entre módulos.
  *
- * ─────────────────────────────────────────────────────────────
- * PARA ACTIVAR EMAILJS:
- *  Reemplaza los valores en CONFIG.emailjs con tus credenciales.
- *  No subas claves reales a repositorios públicos.
- *
- * PARA ACTIVAR TURNSTILE:
- *  1. Ve a dash.cloudflare.com → Turnstile → "Add Site"
- *  2. Dominio: tu-usuario.github.io
- *  3. Copia el sitekey y reemplaza CONFIG.turnstile.sitekey
- *  4. Reemplaza también el data-sitekey en index.html
- * ─────────────────────────────────────────────────────────────
+ * ───────────────────────────────────────────────────────────── *
  */
 
 /* ============================================================
@@ -35,9 +25,9 @@
 const CONFIG = {
 
   emailjs: {
-    publicKey:  'J6SHj0NkxslunIEDz',   // ← tu clave pública de EmailJS
-    serviceId:  'service_nnrx67n',      // ← ID de tu servicio
-    templateId: 'template_wlo5qsr',     // ← ID de tu plantilla
+    publicKey:  'J6SHj0NkxslunIEDz',   
+    serviceId:  'service_nnrx67n',      
+    templateId: 'template_wlo5qsr',      
   },
 
   // Email dividido para dificultar scraping.
@@ -47,11 +37,8 @@ const CONFIG = {
     domain: 'gmail.com',
   },
 
-  // Cloudflare Turnstile sitekey.
-  // Clave de prueba (siempre pasa): 1x00000000000000000000AA
-  // Reemplázala con tu clave real antes de producción.
   turnstile: {
-    sitekey: '1x00000000000000000000AA',
+    sitekey: '0x4AAAAAACfsmM879eUbhavu',
   },
 
   rateLimit: {
