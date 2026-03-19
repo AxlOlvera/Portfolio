@@ -84,7 +84,7 @@ const translations = {
     'projects.featured':      'Destacado',
     'projects.scrum.label':   'Gestión de proyecto:',
     'projects.ixel.desc':     'Producto e-commerce full stack entregado a cliente real (tienda artesanal). Actué como Tech Lead y PM del equipo: organicé tareas, gestioné ramas y conflictos en Git/GitHub, y mantuve al equipo trabajando en tiempo y forma bajo metodología Scrum.',
-    'projects.ixel.tech':     'Contribuí en todas las capas del producto: modelado de base de datos y queries SQL, lógica de negocio en Java, APIs REST, frontend con React y Bootstrap (accesibilidad, SEO, responsivo). Despliegue en AWS S3 + MariaDB en servidor con Linux.',
+    'projects.ixel.tech':     'Contribuí en todas las capas del producto: modelado de base de datos y queries SQL, lógica de negocio en Java, APIs REST, frontend con React y Bootstrap (accesibilidad, SEO, responsivo). Despliegue en AWS EC2 + MariaDB en servidor con Linux.',
     'projects.nasa.desc':     'Dashboard interactivo que consume la API de la NASA (NeoWs) para visualizar asteroides detectados: peligrosidad, diámetro, velocidad y distancia mínima de impacto. Gráficas dinámicas, UI responsiva. En producción vía Vercel.',
     'projects.roadmap.desc':   'Plataforma modular tipo Scrum con tablero de progreso, asignación de tareas, filtros y métricas de avance. Firebase Auth + Firestore, Cloudflare Turnstile en formulario. En producción vía Vercel.',
     'projects.hackaton.desc':  'Dos hackatones de desarrollo acelerado. Frontend: e-commerce con carrito funcional, flujo completo de usuario invitado, SEO y control de versiones Git/GitHub. Backend: agenda de contactos en Java aplicando POO — encapsulamiento, herencia, polimorfismo y manejo de excepciones.',
@@ -143,7 +143,7 @@ const translations = {
     'projects.featured':      'Featured',
     'projects.scrum.label':   'Project management:',
     'projects.ixel.desc':     'Full stack e-commerce product delivered to a real client (artisan shop). Acted as Tech Lead and PM: organized tasks, managed Git branches and conflicts, and kept the team on track under Scrum.',
-    'projects.ixel.tech':     'Contributed across all layers: database modeling and SQL queries, Java business logic, REST APIs, frontend with React and Bootstrap (accessibility, SEO, responsive). Deployed on AWS S3 + MariaDB on Linux server.',
+    'projects.ixel.tech':     'Contributed across all layers: database modeling and SQL queries, Java business logic, REST APIs, frontend with React and Bootstrap (accessibility, SEO, responsive). Deployed on AWS EC2 + MariaDB on Linux server.',
     'projects.nasa.desc':     'Interactive dashboard consuming NASA NeoWs API to visualize detected asteroids: hazard level, diameter, velocity, and minimum impact distance. Dynamic charts, responsive UI. Live on Vercel.',
     'projects.roadmap.desc':   'Scrum-style modular platform with progress board, task assignment, filters, and metrics. Firebase Auth + Firestore, Cloudflare Turnstile on contact form. Live on Vercel.',
     'projects.hackaton.desc':  'Two accelerated development hackathons. Frontend: e-commerce with functional cart, full guest checkout flow, SEO and Git/GitHub version control. Backend: Java contact manager applying OOP — encapsulation, inheritance, polymorphism and exception handling.',
@@ -183,7 +183,14 @@ function applyTranslations(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key  = el.getAttribute('data-i18n');
     const text = translations[lang]?.[key];
-    if (text) el.textContent = text;
+    if (!text) return;
+    // Only set textContent on leaf nodes (no element children).
+    // Elements with child elements (e.g. <p> containing <span> + <br>)
+    // must NOT be overwritten — their children each carry their own data-i18n.
+    const hasElementChildren = [...el.children].length > 0;
+    if (!hasElementChildren) {
+      el.textContent = text;
+    }
   });
   document.documentElement.lang = lang;
 }
