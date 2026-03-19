@@ -64,7 +64,7 @@ const translations = {
 
     // Hero
     'hero.greeting':     'Hola, soy',
-    'hero.role':         'Full Stack Developer & Líder de Equipo',
+    'hero.role':         'Full Stack Developer · Tech Lead & Gestión de Proyectos',
     'hero.description':  'Especializado en Java, Spring Boot, JavaScript y React, con experiencia en liderazgo operativo para construir soluciones escalables y centradas en el usuario.',
     'hero.cta.projects': 'Ver proyectos',
     'hero.cta.contact':  'Contactar',
@@ -72,26 +72,28 @@ const translations = {
     // About
     'about.title':      'Sobre mí',
     'about.paragraph':  'Con más de 6 años de experiencia en entornos bilingües de alto volumen (inglés C1), transicioné de supervisar equipos de 25 personas y gestionar KPIs al desarrollo de aplicaciones web full stack. Aplico una mentalidad de gestión de proyectos —enfocada en metodologías Scrum, documentación clara, resolución estructurada de problemas y colaboración eficiente en equipo— en cada proyecto al que contribuyo.',
-    'about.card1.title': 'Trabajo en equipo',
-    'about.card1.desc':  'Experiencia liderando equipos de hasta 25 personas y colaborando bajo metodología Scrum.',
-    'about.card2.title': 'Resolución de problemas',
-    'about.card2.desc':  'Enfoque en análisis estructurado, documentación clara y mejora continua.',
-    'about.card3.title': 'Desarrollo Full Stack',
-    'about.card3.desc':  'Experiencia en desarrollo web con Java, JavaScript, MySQL y Bootstrap.',
+    'about.card1.title': 'KPI >95% conversión',
+    'about.card1.desc':  'Mantuve métricas de alto rendimiento gestionando equipos de hasta 25 personas, con análisis de datos en tiempo real via Excel.',
+    'about.card2.title': 'Tech Lead & PM',
+    'about.card2.desc':  'Coordiné equipos de desarrollo bajo Scrum: organización de tareas, gestión de repositorios Git y entrega de producto real a cliente.',
+    'about.card3.title': 'Proyectos en producción',
+    'about.card3.desc':  '3 proyectos desplegados en Vercel y AWS. Stack completo: Java · Spring Boot · React · MySQL · Firebase · MariaDB.',
 
     // Projects
     'projects.title':         'Proyectos destacados',
     'projects.featured':      'Destacado',
     'projects.scrum.label':   'Gestión de proyecto:',
-    'projects.ixel.desc':     'Solución e-commerce full stack desarrollada para una tienda artesanal real. Contribuí al desarrollo frontend con JavaScript, HTML, CSS y Bootstrap, y apoyé la integración backend con Java y MySQL.',
-    'projects.ixel.scrum':    'Desarrollado bajo metodología Scrum, con participación en sprint planning, organización de tareas y documentación técnica para entrega al cliente.',
-    'projects.hackaton.desc': 'Aplicación web tipo e-commerce desarrollada en hackatón, con carrito de compras, validaciones en JavaScript y uso de Local Storage.',
-    'projects.agenda.desc':   'Aplicación en Java ejecutable en consola para gestión de contactos, implementando estructuras de datos y lógica orientada a objetos.',
+    'projects.ixel.desc':     'Producto e-commerce full stack entregado a cliente real (tienda artesanal). Actué como Tech Lead y PM del equipo: organicé tareas, gestioné ramas y conflictos en Git/GitHub, y mantuve al equipo trabajando en tiempo y forma bajo metodología Scrum.',
+    'projects.ixel.tech':     'Contribuí en todas las capas del producto: modelado de base de datos y queries SQL, lógica de negocio en Java, APIs REST, frontend con React y Bootstrap (accesibilidad, SEO, responsivo). Despliegue en AWS S3 + MariaDB en servidor con Linux.',
+    'projects.nasa.desc':     'Dashboard interactivo que consume la API de la NASA (NeoWs) para visualizar asteroides detectados: peligrosidad, diámetro, velocidad y distancia mínima de impacto. Gráficas dinámicas, UI responsiva. En producción vía Vercel.',
+    'projects.roadmap.desc':   'Plataforma modular tipo Scrum con tablero de progreso, asignación de tareas, filtros y métricas de avance. Firebase Auth + Firestore, Cloudflare Turnstile en formulario. En producción vía Vercel.',
+    'projects.hackaton.desc':  'Dos hackatones de desarrollo acelerado. Frontend: e-commerce con carrito funcional, flujo completo de usuario invitado, SEO y control de versiones Git/GitHub. Backend: agenda de contactos en Java aplicando POO — encapsulamiento, herencia, polimorfismo y manejo de excepciones.',
 
     // Skills
     'skills.title':    'Habilidades técnicas',
     'skills.frontend': 'Frontend',
     'skills.backend':  'Backend',
+    'skills.devops':   'DevOps & Cloud',
     'skills.tools':    'Herramientas',
 
     // Contact
@@ -121,7 +123,7 @@ const translations = {
 
     // Hero
     'hero.greeting':     "Hi, I'm",
-    'hero.role':         'Full Stack Developer & Team Leader',
+    'hero.role':         'Full Stack Developer · Tech Lead & Project Management',
     'hero.description':  'Specialized in Java, Spring Boot, JavaScript and React, with operational leadership experience building scalable, user-centered solutions.',
     'hero.cta.projects': 'View projects',
     'hero.cta.contact':  'Contact me',
@@ -129,26 +131,28 @@ const translations = {
     // About
     'about.title':      'About me',
     'about.paragraph':  'With 6+ years of experience in high-volume bilingual environments (English C1), I transitioned from supervising teams of 25 and managing KPIs to full stack web development. I apply a project management mindset—focused on Scrum methodologies, clear documentation, structured problem-solving, and efficient team collaboration—to every project I contribute to.',
-    'about.card1.title': 'Team Leadership',
-    'about.card1.desc':  'Experience leading teams of up to 25 people and collaborating under Scrum methodology.',
-    'about.card2.title': 'Problem Solving',
-    'about.card2.desc':  'Focus on structured analysis, clear documentation, and continuous improvement.',
-    'about.card3.title': 'Full Stack Dev',
-    'about.card3.desc':  'Web development experience with Java, JavaScript, MySQL, and Bootstrap.',
+    'about.card1.title': 'KPI >95% Conversion',
+    'about.card1.desc':  'Maintained high-performance KPIs managing teams of up to 25 people, with real-time data analysis via Excel.',
+    'about.card2.title': 'Tech Lead & PM',
+    'about.card2.desc':  'Led development teams under Scrum: task organization, Git repository management and delivery of a real product to a client.',
+    'about.card3.title': 'Projects in Production',
+    'about.card3.desc':  '3 projects deployed on Vercel and AWS. Full stack: Java · Spring Boot · React · MySQL · Firebase · MariaDB.',
 
     // Projects
     'projects.title':         'Featured Projects',
     'projects.featured':      'Featured',
     'projects.scrum.label':   'Project management:',
-    'projects.ixel.desc':     'Full stack e-commerce solution built for a real artisan shop. Contributed to frontend development with JavaScript, HTML, CSS and Bootstrap, and supported backend integration with Java and MySQL.',
-    'projects.ixel.scrum':    'Developed under Scrum methodology, participating in sprint planning, task organization, and technical documentation for client delivery.',
-    'projects.hackaton.desc': 'E-commerce web app developed during a hackathon, featuring a shopping cart, JavaScript validations, and Local Storage usage.',
-    'projects.agenda.desc':   'Console-based Java application for contact management, implementing data structures and object-oriented logic.',
+    'projects.ixel.desc':     'Full stack e-commerce product delivered to a real client (artisan shop). Acted as Tech Lead and PM: organized tasks, managed Git branches and conflicts, and kept the team on track under Scrum.',
+    'projects.ixel.tech':     'Contributed across all layers: database modeling and SQL queries, Java business logic, REST APIs, frontend with React and Bootstrap (accessibility, SEO, responsive). Deployed on AWS S3 + MariaDB on Linux server.',
+    'projects.nasa.desc':     'Interactive dashboard consuming NASA NeoWs API to visualize detected asteroids: hazard level, diameter, velocity, and minimum impact distance. Dynamic charts, responsive UI. Live on Vercel.',
+    'projects.roadmap.desc':   'Scrum-style modular platform with progress board, task assignment, filters, and metrics. Firebase Auth + Firestore, Cloudflare Turnstile on contact form. Live on Vercel.',
+    'projects.hackaton.desc':  'Two accelerated development hackathons. Frontend: e-commerce with functional cart, full guest checkout flow, SEO and Git/GitHub version control. Backend: Java contact manager applying OOP — encapsulation, inheritance, polymorphism and exception handling.',
 
     // Skills
     'skills.title':    'Technical Skills',
     'skills.frontend': 'Frontend',
     'skills.backend':  'Backend',
+    'skills.devops':   'DevOps & Cloud',
     'skills.tools':    'Tools',
 
     // Contact
