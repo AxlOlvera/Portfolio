@@ -2,7 +2,7 @@
 
 Portafolio profesional Full Stack desplegado en GitHub Pages. Desarrollado con HTML5 semántico, CSS puro (metodología BEM + variables CSS) y JavaScript modular sin dependencias de frameworks. Diseño corporativo "Manhattan Slate" con sistema bilingüe ES/EN, formulario anti-spam de cuatro capas e integración de EmailJS.
 
-🔗 **[axlolvera.github.io](https://axlolvera.github.io)**
+🔗 **[axlolvera.github.io](https://axlolvera.github.io/Portfolio/)**
 
 ---
 
